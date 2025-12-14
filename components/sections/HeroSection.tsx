@@ -15,7 +15,7 @@ export function HeroSection({
   subtitle = "Your Next.js starter template with authentication, admin dashboard, and role-based access control. Ready to customize and deploy.",
   primaryCta = "Get Started",
   secondaryCta = "Learn More",
-  primaryCtaHref = "/auth/signup",
+  primaryCtaHref = "/auth/signin",
   secondaryCtaHref = "/about",
 }: HeroSectionProps) {
   return (

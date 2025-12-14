@@ -33,8 +33,11 @@ export default async function Home() {
     redirect("/auth/setup-admin");
   }
 
-  // Get current user for header (signed in or unsigned)
+  // Get current user - redirect to signin if not signed in
   const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    redirect("/auth/signin");
+  }
   const appSettings = await getAppSettings();
 
   // Fetch contact form submissions if user is admin

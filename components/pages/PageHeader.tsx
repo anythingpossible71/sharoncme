@@ -124,15 +124,10 @@ export function PageHeader({ currentUser, appName = "Your App", appLogoUrl }: Pa
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            // Unsigned mode - two buttons
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" asChild>
-                <Link href="/auth/signin">Sign In</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/auth/signup">Let&apos;s Start</Link>
-              </Button>
-            </div>
+            // Unsigned mode - sign in button only
+            <Button variant="outline" asChild>
+              <Link href="/auth/signin">Sign In</Link>
+            </Button>
           )}
 
           {/* Navigation Menu - positioned to the right of avatar */}

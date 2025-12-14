@@ -76,8 +76,8 @@ async function VerifyEmailContent({ searchParams }: VerifyEmailPageProps) {
             <p className="text-sm text-muted-foreground mb-4">
               This could happen if the account was deleted or the link is very old.
             </p>
-            <Link href="/auth/signup">
-              <Button className="w-full">Create New Account</Button>
+            <Link href="/auth/signin">
+              <Button className="w-full">Sign In</Button>
             </Link>
           </CardContent>
         </Card>
@@ -131,11 +131,6 @@ async function VerifyEmailContent({ searchParams }: VerifyEmailPageProps) {
           <div className="space-y-2">
             <Link href="/auth/signin">
               <Button className="w-full">Sign In</Button>
-            </Link>
-            <Link href="/auth/signup">
-              <Button variant="outline" className="w-full">
-                Create New Account
-              </Button>
             </Link>
           </div>
         </CardContent>

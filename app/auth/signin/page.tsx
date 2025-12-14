@@ -57,14 +57,6 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           )}
 
           <SignInForm />
-          <div className="text-center">
-            <p className="text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>
