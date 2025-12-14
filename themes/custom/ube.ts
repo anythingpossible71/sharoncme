@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const ubeTheme: Theme = {
+  name: "ube",
+  label: "Ube (Purple Yam)",
+  description: "Filipino purple yam delight",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "260 30% 28%",
+    card: "0 0% 100%",
+    cardForeground: "260 30% 28%",
+    popover: "0 0% 100%",
+    popoverForeground: "260 30% 28%",
+    primary: "265 50% 60%",
+    primaryForeground: "270 10% 98%",
+    secondary: "260 20% 91%",
+    secondaryForeground: "260 30% 28%",
+    muted: "260 15% 96%",
+    mutedForeground: "260 10% 64%",
+    accent: "245 30% 79%",
+    accentForeground: "260 30% 28%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "265 50% 60%",
+  },
+};

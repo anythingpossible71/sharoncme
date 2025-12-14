@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const caramelDrizzleTheme: Theme = {
+  name: "caramel-drizzle",
+  label: "Caramel Drizzle",
+  description: "Sweet caramel with rich brown tones",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "20 20% 29%",
+    card: "0 0% 100%",
+    cardForeground: "20 20% 29%",
+    popover: "0 0% 100%",
+    popoverForeground: "20 20% 29%",
+    primary: "30 50% 52%",
+    primaryForeground: "30 24% 99%",
+    secondary: "25 20% 93%",
+    secondaryForeground: "20 20% 29%",
+    muted: "30 15% 97%",
+    mutedForeground: "25 10% 65%",
+    accent: "0 28% 38%",
+    accentForeground: "30 24% 99%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "30 50% 52%",
+  },
+};

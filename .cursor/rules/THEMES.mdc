@@ -1,0 +1,142 @@
+---
+description: TypeScript theme system with next-themes
+globs: ["themes/**/*", "app/globals.css", "components/theme-*.tsx"]
+---
+
+# Theme System Rules
+
+## Available Themes
+
+- **Base:** light, dark, system
+- **Custom:** ocean, forest, midnight
+
+## Structure
+
+```
+themes/
+├── types.ts          # TypeScript interfaces
+├── index.ts          # Registry and utilities
+├── base/             # light.ts, dark.ts
+└── custom/           # ocean.ts, forest.ts, midnight.ts
+```
+
+## Adding a New Theme
+
+### 1. Create Theme File
+
+`themes/custom/yourtheme.ts`:
+```typescript
+import { Theme } from "../types"
+
+export const yourTheme: Theme = {
+  name: "your-theme",
+  label: "Your Theme",
+  description: "Theme description",
+  category: "custom",
+  icon: "Star",
+  radius: "0.5rem",
+  colors: {
+    background: "210 100% 98%",
+    foreground: "210 100% 10%",
+    primary: "200 100% 50%",
+    // ... all required colors
+  },
+}
+```
+
+### 2. Register in `themes/index.ts`
+
+```typescript
+import { yourTheme } from "./custom/yourtheme"
+
+export const themes: ThemeRegistry = {
+  // ... existing themes
+  "your-theme": yourTheme,
+}
+```
+
+### 3. Generate CSS and add to `app/globals.css`
+
+```typescript
+import { generateThemeCSS } from "@/themes"
+const css = generateThemeCSS(yourTheme)
+```
+
+### 4. Update ThemeProvider in `app/layout.tsx`
+
+```typescript
+<ThemeProvider
+  themes={["light", "dark", "system", "ocean", "forest", "midnight", "your-theme"]}
+  // ...
+>
+```
+
+## Color Format
+
+HSL without commas:
+```css
+--primary: 217 91% 60%;  /* Correct */
+/* NOT: hsl(217, 91%, 60%) */
+```
+
+## Required Color Variables
+
+Every theme must define:
+- `background`, `foreground`
+- `card`, `card-foreground`
+- `primary`, `primary-foreground`
+- `secondary`, `secondary-foreground`
+- `muted`, `muted-foreground`
+- `accent`, `accent-foreground`
+- `destructive`, `destructive-foreground`
+- `border`, `input`, `ring`
+
+## Theme Utilities
+
+```typescript
+import { getAllThemes, getTheme, getThemesByCategory, validateTheme } from "@/themes"
+
+getAllThemes()                    // All themes
+getTheme("ocean")                 // Specific theme
+getThemesByCategory("custom")     // Themes by category
+validateTheme(newTheme)           // Validate structure
+```
+
+## Using Theme Colors
+
+```tsx
+// Tailwind classes
+<div className="bg-background text-foreground">
+<div className="bg-primary text-primary-foreground">
+<div className="border-border">
+
+// Custom CSS
+.element {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+```
+
+## Conditional Theme Styling
+
+```typescript
+"use client"
+import { useTheme } from "next-themes"
+
+function Component() {
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
+  // ...
+}
+```
+
+## Disabling Theme Switching
+
+Set fixed theme in `app/layout.tsx`:
+```typescript
+<ThemeProvider
+  defaultTheme="light"
+  forcedTheme="light"
+  enableSystem={false}
+>
+```

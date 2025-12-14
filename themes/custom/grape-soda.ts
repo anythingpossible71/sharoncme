@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const grapeSodaTheme: Theme = {
+  name: "grape-soda",
+  label: "Grape Soda",
+  description: "Sweet grape with fizzy purple",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "270 100% 18%",
+    card: "0 0% 100%",
+    cardForeground: "270 100% 18%",
+    popover: "0 0% 100%",
+    popoverForeground: "270 100% 18%",
+    primary: "271 76% 53%",
+    primaryForeground: "0 0% 100%",
+    secondary: "270 50% 93%",
+    secondaryForeground: "270 100% 18%",
+    muted: "270 35% 97%",
+    mutedForeground: "270 10% 60%",
+    accent: "300 47% 75%",
+    accentForeground: "270 100% 18%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "271 76% 53%",
+  },
+};

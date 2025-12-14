@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const cherryBombTheme: Theme = {
+  name: "cherry-bomb",
+  label: "Cherry Bomb",
+  description: "Explosive cherry red with pink accents",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "345 100% 15%",
+    card: "0 0% 100%",
+    cardForeground: "345 100% 15%",
+    popover: "0 0% 100%",
+    popoverForeground: "345 100% 15%",
+    primary: "348 85% 47%",
+    primaryForeground: "0 0% 100%",
+    secondary: "350 100% 93%",
+    secondaryForeground: "345 100% 15%",
+    muted: "350 100% 97%",
+    mutedForeground: "345 15% 56%",
+    accent: "351 100% 86%",
+    accentForeground: "345 100% 15%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "348 85% 47%",
+  },
+};

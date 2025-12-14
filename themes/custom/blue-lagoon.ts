@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const blueLagoonTheme: Theme = {
+  name: "blue-lagoon",
+  label: "Blue Lagoon",
+  description: "Tropical ocean blue paradise",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "200 100% 15%",
+    card: "0 0% 100%",
+    cardForeground: "200 100% 15%",
+    popover: "0 0% 100%",
+    popoverForeground: "200 100% 15%",
+    primary: "195 100% 50%",
+    primaryForeground: "0 0% 100%",
+    secondary: "200 70% 91%",
+    secondaryForeground: "200 100% 15%",
+    muted: "200 50% 95%",
+    mutedForeground: "200 15% 58%",
+    accent: "203 92% 75%",
+    accentForeground: "200 100% 15%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "195 100% 50%",
+  },
+};

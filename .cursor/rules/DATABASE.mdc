@@ -1,0 +1,165 @@
+---
+description: Database schema, Prisma migrations, and query patterns
+globs: ["prisma/**/*", "lib/prisma.ts", "**/*.prisma"]
+alwaysApply: true
+---
+
+# Database Rules
+
+## ⚠️ RESTART SERVER AFTER SCHEMA/MODEL CHANGES ⚠️
+
+**After ANY of these, you MUST restart the dev server (Ctrl+C → `npm run dev`):**
+- Running `npx prisma migrate dev`
+- Running `npx prisma generate`
+- Editing `prisma/schema.prisma`
+- Editing `lib/utils/ulid.ts`
+
+**If you skip this:** `Cannot read properties of undefined (reading 'findMany')`
+
+---
+
+## CRITICAL - Must Follow
+
+1. **Schema changes require migrations** - NEVER just `npx prisma generate`
+   ```bash
+   npx prisma migrate dev --name "descriptive-name"
+   ```
+
+2. **Adding new models requires TWO separate steps:**
+   - Add to schema AND add to ULID extension in `lib/utils/ulid.ts`
+   - Run `npx prisma migrate dev`, THEN `npx prisma generate`, THEN restart dev server
+   - Why both? `migrate dev` regenerates from schema; `generate` is needed for ULID extension (TypeScript wrapper)
+
+3. **Schema before code** - NEVER write queries for models that don't exist
+   ```
+   ❌ Writing prisma.customer.findMany() before Customer model exists
+   ✅ Add model to schema → migrate → then write queries
+   ```
+   Error symptom: `Cannot read properties of undefined (reading 'findMany')`
+
+4. **Import Prisma correctly** - Always use the extended client
+   ```typescript
+   import { prisma } from "@/lib/prisma"  // ✅ Correct
+   // import { PrismaClient } from "@prisma/client"  // ❌ Wrong
+   ```
+
+5. **Soft deletes** - Never hard delete, always filter active records
+   ```typescript
+   where: { deleted_at: null, ...otherConditions }
+   ```
+
+## Schema Standards
+
+Every model must include:
+```prisma
+model YourModel {
+  id         String    @id @default("")  // Auto-generated ULID
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?                   // Soft delete
+}
+```
+
+## ULID IDs
+
+- 26-character strings, auto-generated (e.g., `01JZK5AT1CBD1SBW5T3JQ60VPR`)
+- Sortable by creation time
+- No `parseInt()` needed for route params - IDs are strings
+
+### Adding New Models to ULID Extension (CRITICAL)
+
+**New Prisma models MUST be added to the ULID extension in `lib/utils/ulid.ts`:**
+
+```typescript
+// In lib/utils/ulid.ts, add to ulidExtension:
+export const ulidExtension = Prisma.defineExtension({
+  query: {
+    // ... existing models ...
+    yourNewModel: {  // ✅ Add for each new model
+      create({ args, query }) {
+        args.data.id = args.data.id || generateId();
+        return query(args);
+      },
+      createMany({ args, query }) {
+        if (Array.isArray(args.data)) {
+          args.data = args.data.map((item) => ({
+            ...item,
+            id: item.id || generateId(),
+          }));
+        }
+        return query(args);
+      },
+      upsert({ args, query }) {
+        args.create.id = args.create.id || generateId();
+        return query(args);
+      },
+    },
+  },
+});
+```
+
+> ⚠️ **REQUIRED AFTER ULID EXTENSION CHANGES:**
+> The ULID extension is TypeScript code that wraps the Prisma client.
+> `migrate dev` only regenerates from schema changes—it does NOT pick up ULID extension changes.
+> You MUST run `npx prisma generate` separately after modifying this file, then restart the dev server.
+
+### Complete Workflow for Adding New Models
+
+1. ☐ Add model to `prisma/schema.prisma`
+2. ☐ Add model to ULID extension in `lib/utils/ulid.ts`
+3. ☐ Run `npx prisma migrate dev --name "add-model-name"`
+4. ☐ Run `npx prisma generate` (required after ULID extension changes)
+5. ☐ Restart dev server
+
+## Query Patterns
+
+```typescript
+// Soft delete
+await prisma.user.update({
+  where: { id },
+  data: { deleted_at: new Date() }
+})
+
+// Query active records
+await prisma.user.findMany({
+  where: { deleted_at: null }
+})
+
+// Transactions for multi-table operations
+await prisma.$transaction(async (tx) => {
+  const user = await tx.user.create({ data: userData })
+  await tx.userProfile.create({ data: { user_id: user.id, ...profileData } })
+  return user
+})
+```
+
+## Migration Naming
+
+✅ Good: `add-user-preferences`, `remove-unused-field`, `add-email-index`
+❌ Bad: `update`, `fix`, `change`, `migration1`
+
+## Quick Commands
+
+| Action | Command |
+|--------|---------|
+| Schema change | `npx prisma migrate dev --name "name"` |
+| View data | `npm run db:studio` |
+| Reset database | `npm run db:reset --yes` |
+| Regenerate types only | `npx prisma generate` |
+
+## Database Files in Git
+
+**This is a TEMPLATE repository** - database files ARE committed intentionally:
+- `db/prod.db` provides working sample data
+- Enables instant setup for new developers
+- Do NOT add `*.db` to `.gitignore` in this repo
+
+## Troubleshooting
+
+| Error | Solution |
+|-------|----------|
+| "Cannot find module '.prisma/client'" | `npx prisma generate` |
+| "Table doesn't exist" | `npx prisma migrate dev --name "sync"` |
+| "Database locked" | Restart dev server |
+| Types don't match | `npx prisma generate` |
+| "Cannot read properties of undefined (reading 'findMany')" | Add model to ULID extension in `lib/utils/ulid.ts`, then `npx prisma generate` and restart |

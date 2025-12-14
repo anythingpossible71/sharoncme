@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const strawberrySwirlTheme: Theme = {
+  name: "strawberry-swirl",
+  label: "Strawberry Swirl",
+  description: "Sweet strawberry with golden swirls",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "260 38% 24%",
+    card: "0 0% 100%",
+    cardForeground: "260 38% 24%",
+    popover: "0 0% 100%",
+    popoverForeground: "260 38% 24%",
+    primary: "338 80% 48%",
+    primaryForeground: "20 100% 98%",
+    secondary: "0 0% 88%",
+    secondaryForeground: "260 38% 24%",
+    muted: "0 0% 94%",
+    mutedForeground: "270 12% 56%",
+    accent: "38 98% 62%",
+    accentForeground: "260 38% 24%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "338 80% 48%",
+  },
+};

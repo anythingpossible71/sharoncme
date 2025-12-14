@@ -1,0 +1,62 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import jwt from "jsonwebtoken";
+import { sendPasswordResetEmail } from "@/lib/email/auth-email-wrapper";
+import { z } from "zod";
+import { logger } from "@/lib/logger";
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const validationResult = forgotPasswordSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
+    }
+
+    const { email } = validationResult.data;
+
+    // Find user by email
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+        deleted_at: null,
+      },
+    });
+
+    // Always return success response to prevent email enumeration
+    // Don't reveal whether the email exists or not for security
+    if (!user) {
+      return NextResponse.json({
+        success: true,
+        message: "If an account with that email exists, we've sent a password reset link",
+      });
+    }
+
+    // Generate reset token (1 hour expiry)
+    const secret = process.env.AUTH_SECRET;
+    if (!secret) {
+      throw new Error("AUTH_SECRET not configured");
+    }
+
+    const resetToken = jwt.sign({ userId: user.id, type: "reset" }, secret, { expiresIn: "1h" });
+
+    // Send password reset email
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const resetUrl = `${appUrl}/auth/reset-password?token=${resetToken}`;
+
+    await sendPasswordResetEmail(user.email, resetUrl);
+
+    return NextResponse.json({
+      success: true,
+      message: "If an account with that email exists, we've sent a password reset link",
+    });
+  } catch (error) {
+    logger.error("Forgot password error:", {}, error instanceof Error ? error : undefined);
+    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
+  }
+}

@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const blueberryCheesecakeTheme: Theme = {
+  name: "blueberry-cheesecake",
+  label: "Blueberry Cheesecake",
+  description: "Rich blueberry with creamy cheesecake",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "210 9% 24%",
+    card: "0 0% 100%",
+    cardForeground: "210 9% 24%",
+    popover: "0 0% 100%",
+    popoverForeground: "210 9% 24%",
+    primary: "230 60% 64%",
+    primaryForeground: "220 14% 97%",
+    secondary: "210 11% 87%",
+    secondaryForeground: "210 9% 24%",
+    muted: "210 8% 94%",
+    mutedForeground: "210 5% 59%",
+    accent: "48 100% 72%",
+    accentForeground: "210 9% 24%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "230 60% 64%",
+  },
+};

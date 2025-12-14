@@ -1,0 +1,168 @@
+---
+description: shadcn/ui component selection and usage
+globs: ["components/**/*", "app/**/*.tsx"]
+---
+
+# UI Components Rules (shadcn/ui)
+
+## CRITICAL - Common Runtime Errors
+
+### Select: Empty String Values
+
+Select components cannot use `value=""`. Radix UI reserves empty string for "no selection".
+
+❌ **Causes runtime error:**
+```typescript
+<SelectItem value="">None</SelectItem>
+<SelectItem value={item.id}> // where item.id might be ""
+```
+
+✅ **Use placeholder value:**
+```typescript
+<SelectItem value="none">None</SelectItem>
+<SelectItem value={item.id || "none"}>
+
+// Convert in handlers:
+value={category || "none"}
+onValueChange={(v) => setCategory(v === "none" ? "" : v)}
+```
+
+## Selection Hierarchy
+
+1. **Check existing** `components/ui/` first
+2. **Install from registry** if not present: `npx shadcn@latest add [component]`
+3. **Combine existing** components before creating custom
+4. **Create custom** only as last resort (follow shadcn patterns)
+
+## Installed Components
+
+Available in `components/ui/`:
+- Alert, Avatar, Badge, Button, Card
+- Dialog, DropdownMenu, Form, Input, Label
+- PasswordInput, Select, Separator, Table
+- Tabs, Toast, Toaster, Checkbox
+
+## Common Request Mappings
+
+| User Request | Use Component |
+|-------------|---------------|
+| "modal", "popup" | Dialog |
+| "dropdown", "menu" | DropdownMenu or Select |
+| "notification" | Toast |
+| "loading" | Skeleton or Loader2 (lucide) |
+| "sidebar", "drawer" | Sheet (install if needed) |
+| "tooltip" | Tooltip (install if needed) |
+| "toggle", "switch" | Switch (install if needed) |
+| "data table" | Table with pagination |
+| "date picker" | Calendar (install if needed) |
+| "autocomplete" | Command (install if needed) |
+
+## Installation
+
+```bash
+# Single component
+npx shadcn@latest add dialog
+
+# Multiple components
+npx shadcn@latest add dialog sheet tooltip
+
+# Update all
+npx shadcn@latest update
+```
+
+## Usage Pattern
+
+```typescript
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+```
+
+## Styling Rules
+
+1. Use component's built-in variants (`variant="destructive"`, `size="sm"`)
+2. Extend with `className` using Tailwind utilities
+3. Never use inline styles or separate CSS files
+
+## Component Gotchas
+
+### Dialog: Controlled vs Uncontrolled
+
+**Uncontrolled** (simple, self-contained):
+```typescript
+<Dialog>
+  <DialogTrigger asChild><Button>Open</Button></DialogTrigger>
+  <DialogContent>...</DialogContent>
+</Dialog>
+```
+
+**Controlled** (when you need to close programmatically):
+```typescript
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Open</Button>
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <YourForm onSuccess={() => setOpen(false)} />
+  </DialogContent>
+</Dialog>
+```
+
+⚠️ Never mix: Don't use `DialogTrigger` inside a controlled Dialog
+
+### Select: No Empty Strings
+
+Radix Select doesn't allow `value=""`:
+```typescript
+// ❌ <SelectItem value="">None</SelectItem>
+// ✅ <SelectItem value="none">None</SelectItem>
+
+// Convert in handlers:
+value={category || "none"}
+onValueChange={(v) => setCategory(v === "none" ? "" : v)}
+```
+
+### Client Components: Hydration Mismatch
+
+Components using browser APIs (`window`, `localStorage`, `document`) must wait for mount:
+
+```typescript
+"use client"
+const [mounted, setMounted] = useState(false)
+useEffect(() => setMounted(true), [])
+
+if (!mounted) return null  // or <Skeleton />
+
+// Now safe to use browser APIs
+const width = window.innerWidth
+```
+
+**When to use this pattern:**
+- Accessing `window.*` or `document.*`
+- Reading `localStorage` or `sessionStorage`
+- Viewport/position calculations
+- Theme-dependent rendering with `useTheme()`
+- Any value that differs between server and client
+
+> ⚠️ Without this pattern, React hydration will fail because server-rendered HTML
+> won't match client-rendered output (server has no `window` object).
+
+## Anti-Patterns
+
+❌ Installing Material-UI, Ant Design, or other UI libraries
+❌ Writing custom modals without checking Dialog
+❌ Creating custom form inputs without Form primitives
+❌ Using vanilla HTML inputs without Input styling
+❌ Implementing custom toast systems
+❌ Writing CSS modules or styled-components
+❌ Using `DialogTrigger` inside a controlled Dialog (with `open={}` prop)
+❌ Using empty string values in Select components (`value=""`)
+❌ Using `window`/`localStorage`/`document` without the mounted state pattern
+
+## Response Template
+
+When implementing UI:
+1. "I'll use the existing [component] from shadcn/ui"
+2. "Let me install [component] from shadcn/ui"
+3. "I'll combine [component1] and [component2]"
+4. Only if none exist: "I'll create a custom component following shadcn patterns"

@@ -1,0 +1,79 @@
+---
+description: CrunchyCone platform integration
+globs: ["crunchycone.toml", "*crunchycone*"]
+alwaysApply: false
+---
+
+# CrunchyCone Platform Rules
+
+## When This Applies
+
+Only when:
+- `crunchycone.toml` exists in project root, OR
+- User mentions CrunchyCone deployment/integration
+
+**Without `crunchycone.toml`:** Skip these steps entirely.
+
+## Quick Setup
+
+```bash
+# Initialize (creates crunchycone.toml)
+npx --yes crunchycone-cli project init
+
+# Authenticate
+npx --yes crunchycone-cli auth login
+
+# Link project
+npx --yes crunchycone-cli project link --setup
+```
+
+## Status Check
+
+```bash
+# Verify setup
+npx --yes crunchycone-cli auth check && ls crunchycone.toml
+```
+
+## Common Commands
+
+| Command | Purpose |
+|---------|---------|
+| `crunchycone-cli auth check` | Check auth status |
+| `crunchycone-cli auth login` | Authenticate |
+| `crunchycone-cli project init` | Create config file |
+| `crunchycone-cli project link --setup` | Link to platform |
+| `crunchycone-cli project builds` | List recent builds |
+| `crunchycone-cli project builds log <id>` | View build logs |
+| `crunchycone-cli env list` | List env vars |
+| `crunchycone-cli secrets set KEY value` | Set secret |
+
+## Build Monitoring
+
+```bash
+# Check recent builds
+npx --yes crunchycone-cli project builds
+
+# View failed build logs
+npx --yes crunchycone-cli project builds log <buildId>
+```
+
+## Common Build Failures
+
+- Missing environment variables
+- TypeScript compilation errors
+- Database migration issues
+- Missing `export const dynamic = "force-dynamic"`
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| "Command not found" | `npm install` |
+| "Not authenticated" | `crunchycone-cli auth login` |
+| Missing config | `crunchycone-cli project init` |
+
+## Notes
+
+- `crunchycone.toml` should be committed to Git
+- Credentials stored locally in home directory
+- Auth persists across terminal sessions

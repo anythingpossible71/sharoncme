@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const slateProfessionalTheme: Theme = {
+  name: "slate-professional",
+  label: "Slate Professional",
+  description: "Clean professional look with excellent readability",
+  category: "custom",
+  radius: "0.375rem",
+  colors: {
+    background: "210 20% 98%",
+    foreground: "222 47% 11%",
+    card: "0 0% 100%",
+    cardForeground: "222 47% 11%",
+    popover: "0 0% 100%",
+    popoverForeground: "222 47% 11%",
+    primary: "222 47% 25%",
+    primaryForeground: "210 20% 98%",
+    secondary: "214 32% 91%",
+    secondaryForeground: "222 47% 11%",
+    muted: "214 32% 95%",
+    mutedForeground: "215 16% 47%",
+    accent: "214 95% 50%",
+    accentForeground: "0 0% 100%",
+    destructive: "0 84% 45%",
+    destructiveForeground: "0 0% 100%",
+    border: "214 32% 85%",
+    input: "214 32% 85%",
+    ring: "222 47% 25%",
+  },
+};

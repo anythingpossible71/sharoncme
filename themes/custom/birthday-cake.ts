@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const birthdayCakeTheme: Theme = {
+  name: "birthday-cake",
+  label: "Birthday Cake",
+  description: "Festive pink and periwinkle celebration",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "0 0% 29%",
+    card: "0 0% 100%",
+    cardForeground: "0 0% 29%",
+    popover: "0 0% 100%",
+    popoverForeground: "0 0% 29%",
+    primary: "343 100% 88%",
+    primaryForeground: "0 0% 29%",
+    secondary: "330 15% 92%",
+    secondaryForeground: "0 0% 29%",
+    muted: "330 10% 97%",
+    mutedForeground: "0 0% 62%",
+    accent: "225 45% 66%",
+    accentForeground: "0 0% 29%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "343 100% 88%",
+  },
+};

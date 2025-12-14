@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const vividVioletTheme: Theme = {
+  name: "vivid-violet",
+  label: "Vivid Violet",
+  description: "Deep violet with purple energy",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "270 100% 13%",
+    card: "0 0% 100%",
+    cardForeground: "270 100% 13%",
+    popover: "0 0% 100%",
+    popoverForeground: "270 100% 13%",
+    primary: "282 100% 41%",
+    primaryForeground: "0 0% 100%",
+    secondary: "280 70% 94%",
+    secondaryForeground: "270 100% 13%",
+    muted: "280 50% 97%",
+    mutedForeground: "270 10% 58%",
+    accent: "282 58% 58%",
+    accentForeground: "0 0% 100%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "282 100% 41%",
+  },
+};

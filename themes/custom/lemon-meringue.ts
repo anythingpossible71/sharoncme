@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const lemonMeringueTheme: Theme = {
+  name: "lemon-meringue",
+  label: "Lemon Meringue",
+  description: "Bright lemon with fluffy meringue",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "280 6% 42%",
+    card: "0 0% 100%",
+    cardForeground: "280 6% 42%",
+    popover: "0 0% 100%",
+    popoverForeground: "280 6% 42%",
+    primary: "51 100% 76%",
+    primaryForeground: "280 6% 42%",
+    secondary: "55 100% 91%",
+    secondaryForeground: "280 6% 42%",
+    muted: "55 100% 94%",
+    mutedForeground: "280 5% 70%",
+    accent: "210 100% 82%",
+    accentForeground: "280 6% 42%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "51 100% 76%",
+  },
+};

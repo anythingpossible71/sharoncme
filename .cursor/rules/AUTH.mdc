@@ -1,0 +1,166 @@
+---
+description: Authentication patterns using Auth.js v5 (NextAuth)
+globs: ["app/auth/**/*", "lib/auth/**/*", "components/auth/**/*"]
+---
+
+# Authentication Rules (Auth.js v5)
+
+## Core Functions
+
+```typescript
+import { auth, signIn, signOut } from "@/lib/auth"
+import { getCurrentUser, isAdmin, hasRole, requireRole } from "@/lib/auth/permissions"
+```
+
+| Function | Usage |
+|----------|-------|
+| `auth()` | Get session (returns `{ user: { id, email, roles } }`) |
+| `signIn()` | Server-side sign in (use in server actions) |
+| `signOut()` | Server-side sign out (use in server actions) |
+| `getCurrentUser()` | Get full user with profile and roles from DB |
+| `isAdmin(userId)` | Check if user has admin role |
+| `hasRole(userId, roleName)` | Check for specific role |
+| `requireRole(roleName)` | Redirect if role missing |
+
+## Sign In/Out with Server Actions (CRITICAL)
+
+**Always use server actions for credentials sign-in/sign-out.** Client-side `signIn`/`signOut` from `next-auth/react` can fail due to Turbopack issues with catch-all routes.
+
+```typescript
+// app/actions/auth.ts
+"use server"
+
+import { signIn, signOut } from "@/lib/auth"
+import { AuthError } from "next-auth"
+
+export async function signInAction(data: { email: string; password: string; callbackUrl?: string }) {
+  try {
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    })
+    return { success: true, redirectTo: data.callbackUrl || "/" }
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return { success: false, error: "Invalid email or password" }
+    }
+    throw error
+  }
+}
+
+export async function signOutAction() {
+  await signOut({ redirect: false })
+  return { success: true, redirectTo: "/" }
+}
+```
+
+**Client component usage:**
+```typescript
+"use client"
+import { signInAction, signOutAction } from "@/app/actions/auth"
+
+// Sign in
+const result = await signInAction({ email, password, callbackUrl: "/admin" })
+if (result.success) router.push(result.redirectTo)
+
+// Sign out
+const result = await signOutAction()
+router.push(result.redirectTo)
+router.refresh()
+```
+
+## Protected Routes Pattern
+
+### Server Components
+```typescript
+import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation"
+
+export default async function ProtectedPage() {
+  const session = await auth()
+  if (!session?.user) redirect("/auth/signin")
+
+  // For admin-only:
+  if (!session.user.roles.includes("admin")) redirect("/")
+
+  return <div>Protected content</div>
+}
+```
+
+### Server Actions
+```typescript
+"use server"
+import { getCurrentUser, isAdmin } from "@/lib/auth/permissions"
+
+export async function adminAction() {
+  const user = await getCurrentUser()
+  if (!user) throw new Error("Unauthorized")
+  if (!(await isAdmin(user.id))) throw new Error("Admin required")
+
+  // Do protected operation...
+}
+```
+
+### API Routes
+```typescript
+import { auth } from "@/lib/auth"
+import { isAdmin } from "@/lib/auth/permissions"
+
+export async function GET() {
+  const session = await auth()
+  if (!session?.user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  if (!(await isAdmin(session.user.id))) {
+    return Response.json({ error: "Forbidden" }, { status: 403 })
+  }
+
+  // Handle request...
+}
+```
+
+## Session Structure
+
+```typescript
+session.user = {
+  id: string      // ULID
+  email: string
+  name?: string
+  image?: string
+  roles: string[] // ["user", "admin", ...]
+}
+```
+
+## Auth Providers
+
+- **Credentials** - Email/password
+- **Email** - Magic links (logged to console in dev)
+- **Google** - OAuth (requires `GOOGLE_CLIENT_ID/SECRET`)
+- **GitHub** - OAuth (requires `GITHUB_CLIENT_ID/SECRET`)
+
+## Security Patterns
+
+1. **Always check auth server-side** - Never trust client
+2. **Self-protection** - Prevent users from removing own admin role
+3. **Soft deletes** - Include `deleted_at: null` in user queries
+4. **Rate limiting** - Built-in protection on auth endpoints
+
+## First-Time Setup Flow
+
+```typescript
+import { checkAdminExists } from "@/lib/auth/permissions"
+
+// Redirect to setup if no admin exists
+const adminExists = await checkAdminExists()
+if (!adminExists) redirect("/auth/setup-admin")
+```
+
+## Anti-Patterns
+
+❌ Don't use client-side `signIn`/`signOut` from `next-auth/react` for credentials
+❌ Don't check auth in middleware for Server Actions
+❌ Don't use `getSession()` - use `auth()` instead
+❌ Don't expose sensitive user data to client
+❌ Don't skip auth checks "for performance"

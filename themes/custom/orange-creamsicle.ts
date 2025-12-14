@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const orangeCreamsicleTheme: Theme = {
+  name: "orange-creamsicle",
+  label: "Orange Creamsicle",
+  description: "Bright orange with creamy vanilla",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "15 30% 43%",
+    card: "0 0% 100%",
+    cardForeground: "15 30% 43%",
+    popover: "0 0% 100%",
+    popoverForeground: "15 30% 43%",
+    primary: "20 97% 75%",
+    primaryForeground: "0 0% 100%",
+    secondary: "30 100% 93%",
+    secondaryForeground: "15 30% 43%",
+    muted: "30 100% 96%",
+    mutedForeground: "20 15% 70%",
+    accent: "30 100% 87%",
+    accentForeground: "15 30% 43%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "20 97% 75%",
+  },
+};

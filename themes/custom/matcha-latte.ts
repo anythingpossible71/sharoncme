@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const matchaLatteTheme: Theme = {
+  name: "matcha-latte",
+  label: "Matcha Latte",
+  description: "Earthy green tea with creamy brown",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "25 18% 36%",
+    card: "0 0% 100%",
+    cardForeground: "25 18% 36%",
+    popover: "0 0% 100%",
+    popoverForeground: "25 18% 36%",
+    primary: "80 25% 64%",
+    primaryForeground: "40 20% 97%",
+    secondary: "75 45% 87%",
+    secondaryForeground: "25 18% 36%",
+    muted: "75 30% 94%",
+    mutedForeground: "30 10% 67%",
+    accent: "30 30% 57%",
+    accentForeground: "25 18% 36%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "80 25% 64%",
+  },
+};

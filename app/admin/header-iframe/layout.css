@@ -1,0 +1,29 @@
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  /* Fallback to admin light theme background (216 19% 95%) if --admin-background CSS variable not loaded yet */
+  background-color: hsl(var(--admin-background, 216 19% 95%)) !important;
+  height: 60px !important;
+  min-height: 60px !important;
+  max-height: 60px !important;
+  overflow: hidden !important;
+  display: block !important;
+}
+
+#__next {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 60px !important;
+  min-height: 60px !important;
+  max-height: 60px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  /* Fallback to admin light theme background (216 19% 95%) if --admin-background CSS variable not loaded yet */
+  background-color: hsl(var(--admin-background, 216 19% 95%)) !important;
+}
+
+#__next > * {
+  flex-shrink: 0 !important;
+}
+

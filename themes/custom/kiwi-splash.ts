@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const kiwiSplashTheme: Theme = {
+  name: "kiwi-splash",
+  label: "Kiwi Splash",
+  description: "Zesty kiwi green with yellow hints",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "90 60% 16%",
+    card: "0 0% 100%",
+    cardForeground: "90 60% 16%",
+    popover: "0 0% 100%",
+    popoverForeground: "90 60% 16%",
+    primary: "85 73% 57%",
+    primaryForeground: "0 0% 0%",
+    secondary: "90 70% 92%",
+    secondaryForeground: "90 60% 16%",
+    muted: "95 70% 95%",
+    mutedForeground: "90 10% 56%",
+    accent: "72 100% 64%",
+    accentForeground: "90 60% 16%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "85 73% 57%",
+  },
+};

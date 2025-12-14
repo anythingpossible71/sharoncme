@@ -1,0 +1,187 @@
+/* Admin-specific theme CSS */
+/* This file contains theme variables exclusively for the admin dashboard */
+/* Uses --admin-* namespace to avoid ANY conflicts with app CSS */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Circular crop styling for react-image-crop - hide default selection, show custom overlay */
+.circular-crop-mode .ReactCrop__crop-selection {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.circular-crop-mode .ReactCrop__drag-handle {
+  border-radius: 50% !important;
+  background: white !important;
+  border: 2px solid white !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+@layer base {
+  /* CRITICAL: Default to light theme for admin routes to prevent flash */
+  /* This applies when data-admin-theme is not yet set (before React hydrates) */
+  /* Must come BEFORE the dark theme rule to ensure light is default */
+  html:not([data-app-theme]):not([data-admin-theme]),
+  html:not([data-app-theme])[data-admin-theme=""] {
+    /* Use light theme as default to prevent theme flash */
+    --admin-background: 0 0% 100%;
+    --admin-foreground: 222.2 84% 4.9%;
+    --admin-card: 0 0% 100%;
+    --admin-card-foreground: 222.2 84% 4.9%;
+    --admin-popover: 0 0% 100%;
+    --admin-popover-foreground: 222.2 84% 4.9%;
+    --admin-primary: 210 81% 17%;
+    --admin-primary-foreground: 210 40% 98%;
+    --admin-secondary: 210 40% 91.7%;
+    --admin-secondary-foreground: 210 81% 17%;
+    --admin-muted: 210 40% 91.7%;
+    --admin-muted-foreground: 215.4 16.3% 46.9%;
+    --admin-accent: 210 40% 96.1%;
+    --admin-accent-foreground: 210 81% 17%;
+    --admin-destructive: 0 84.2% 60.2%;
+    --admin-destructive-foreground: 210 40% 98%;
+    --admin-border: 214.3 31.8% 91.4%;
+    --admin-input: 214.3 31.8% 91.4%;
+    --admin-ring: 210 81% 17%;
+    --admin-radius: 0.5rem;
+
+    /* Map to standard Tailwind variable names */
+    --background: var(--admin-background);
+    --foreground: var(--admin-foreground);
+    --card: var(--admin-card);
+    --card-foreground: var(--admin-card-foreground);
+    --popover: var(--admin-popover);
+    --popover-foreground: var(--admin-popover-foreground);
+    --primary: var(--admin-primary);
+    --primary-foreground: var(--admin-primary-foreground);
+    --secondary: var(--admin-secondary);
+    --secondary-foreground: var(--admin-secondary-foreground);
+    --muted: var(--admin-muted);
+    --muted-foreground: var(--admin-muted-foreground);
+    --accent: var(--admin-accent);
+    --accent-foreground: var(--admin-accent-foreground);
+    --destructive: var(--admin-destructive);
+    --destructive-foreground: var(--admin-destructive-foreground);
+    --border: var(--admin-border);
+    --input: var(--admin-input);
+    --ring: var(--admin-ring);
+    --radius: var(--admin-radius);
+  }
+
+  /* CRITICAL: Only apply admin theme variables when data-admin-theme is present AND NOT data-app-theme */
+  /* This ensures admin CSS doesn't affect app pages even if data-admin-theme is briefly present */
+  [data-admin-theme="light"]:not([data-app-theme]) {
+    /* Admin-specific variables (for reference, not used by Tailwind) */
+    --admin-background: 216 19% 95%;
+    --admin-foreground: 222.2 84% 4.9%;
+    --admin-card: 0 0% 100%;
+    --admin-card-foreground: 222.2 84% 4.9%;
+    --admin-popover: 0 0% 100%;
+    --admin-popover-foreground: 222.2 84% 4.9%;
+    --admin-primary: 210 81% 17%;
+    --admin-primary-foreground: 210 40% 98%;
+    --admin-secondary: 210 40% 91.7%;
+    --admin-secondary-foreground: 210 81% 17%;
+    --admin-muted: 210 40% 91.7%;
+    --admin-muted-foreground: 215.4 16.3% 46.9%;
+    --admin-accent: 210 40% 96.1%;
+    --admin-accent-foreground: 210 81% 17%;
+    --admin-destructive: 0 84.2% 60.2%;
+    --admin-destructive-foreground: 210 40% 98%;
+    --admin-border: 214.3 31.8% 91.4%;
+    --admin-input: 214.3 31.8% 91.4%;
+    --admin-ring: 210 81% 17%;
+    --admin-radius: 0.5rem;
+
+    /* Map to standard Tailwind variable names so bg-background, text-foreground, etc. work */
+    --background: var(--admin-background);
+    --foreground: var(--admin-foreground);
+    --card: var(--admin-card);
+    --card-foreground: var(--admin-card-foreground);
+    --popover: var(--admin-popover);
+    --popover-foreground: var(--admin-popover-foreground);
+    --primary: var(--admin-primary);
+    --primary-foreground: var(--admin-primary-foreground);
+    --secondary: var(--admin-secondary);
+    --secondary-foreground: var(--admin-secondary-foreground);
+    --muted: var(--admin-muted);
+    --muted-foreground: var(--admin-muted-foreground);
+    --accent: var(--admin-accent);
+    --accent-foreground: var(--admin-accent-foreground);
+    --destructive: var(--admin-destructive);
+    --destructive-foreground: var(--admin-destructive-foreground);
+    --border: var(--admin-border);
+    --input: var(--admin-input);
+    --ring: var(--admin-ring);
+    --radius: var(--admin-radius);
+  }
+
+  /* CRITICAL: Only apply admin theme variables when data-admin-theme is present AND NOT data-app-theme */
+  [data-admin-theme="dark"]:not([data-app-theme]) {
+    /* Admin-specific variables (for reference, not used by Tailwind) */
+    --admin-background: 222.2 84% 4.9%;
+    --admin-foreground: 210 40% 98%;
+    --admin-card: 222.2 84% 4.9%;
+    --admin-card-foreground: 210 40% 98%;
+    --admin-popover: 222.2 84% 4.9%;
+    --admin-popover-foreground: 210 40% 98%;
+    --admin-primary: 210 40% 98%;
+    --admin-primary-foreground: 222.2 47.4% 11.2%;
+    --admin-secondary: 217.2 32.6% 7.5%;
+    --admin-secondary-foreground: 210 40% 98%;
+    --admin-muted: 217.2 32.6% 7.5%;
+    --admin-muted-foreground: 215 20.2% 65.1%;
+    --admin-accent: 217.2 32.6% 17.5%;
+    --admin-accent-foreground: 210 40% 98%;
+    --admin-destructive: 0 62.8% 30.6%;
+    --admin-destructive-foreground: 210 40% 98%;
+    --admin-border: 217.2 32.6% 17.5%;
+    --admin-input: 217.2 32.6% 17.5%;
+    --admin-ring: 212.7 26.8% 83.9%;
+
+    /* Map to standard Tailwind variable names so bg-background, text-foreground, etc. work */
+    --background: var(--admin-background);
+    --foreground: var(--admin-foreground);
+    --card: var(--admin-card);
+    --card-foreground: var(--admin-card-foreground);
+    --popover: var(--admin-popover);
+    --popover-foreground: var(--admin-popover-foreground);
+    --primary: var(--admin-primary);
+    --primary-foreground: var(--admin-primary-foreground);
+    --secondary: var(--admin-secondary);
+    --secondary-foreground: var(--admin-secondary-foreground);
+    --muted: var(--admin-muted);
+    --muted-foreground: var(--admin-muted-foreground);
+    --accent: var(--admin-accent);
+    --accent-foreground: var(--admin-accent-foreground);
+    --destructive: var(--admin-destructive);
+    --destructive-foreground: var(--admin-destructive-foreground);
+    --border: var(--admin-border);
+    --input: var(--admin-input);
+    --ring: var(--admin-ring);
+    --radius: var(--admin-radius);
+  }
+  
+  /* CRITICAL: Full theme-level isolation for admin typography */
+  /* Set base font-size on html element to prevent inheritance from app theme body */
+  html[data-admin-theme]:not([data-app-theme]) {
+    font-size: 16px !important; /* Base font size - all rem/em units in admin are relative to this */
+  }
+  
+  /* Isolate admin theme font-family from app theme */
+  /* Apply to html and all descendants when admin theme is active */
+  html[data-admin-theme]:not([data-app-theme]),
+  html[data-admin-theme]:not([data-app-theme]) * {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+  
+  /* Override body font-size specifically for admin theme */
+  /* This ensures body doesn't inherit app theme's 4em */
+  html[data-admin-theme]:not([data-app-theme]) body {
+    font-size: 1rem !important; /* 1rem = 16px (relative to html font-size above) */
+  }
+}

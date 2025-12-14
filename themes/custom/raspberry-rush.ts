@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const raspberryRushTheme: Theme = {
+  name: "raspberry-rush",
+  label: "Raspberry Rush",
+  description: "Intense raspberry with pink highlights",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "340 100% 12%",
+    card: "0 0% 100%",
+    cardForeground: "340 100% 12%",
+    popover: "0 0% 100%",
+    popoverForeground: "340 100% 12%",
+    primary: "338 92% 46%",
+    primaryForeground: "0 0% 100%",
+    secondary: "340 100% 93%",
+    secondaryForeground: "340 100% 12%",
+    muted: "340 100% 96%",
+    mutedForeground: "340 15% 57%",
+    accent: "330 100% 71%",
+    accentForeground: "340 100% 12%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "338 92% 46%",
+  },
+};

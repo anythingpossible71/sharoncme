@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const rockyRoadTheme: Theme = {
+  name: "rocky-road",
+  label: "Rocky Road",
+  description: "Rich chocolate with marshmallow swirls",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "20 15% 30%",
+    card: "0 0% 100%",
+    cardForeground: "20 15% 30%",
+    popover: "0 0% 100%",
+    popoverForeground: "20 15% 30%",
+    primary: "15 20% 47%",
+    primaryForeground: "30 10% 97%",
+    secondary: "20 10% 88%",
+    secondaryForeground: "20 15% 30%",
+    muted: "20 8% 94%",
+    mutedForeground: "20 5% 61%",
+    accent: "15 30% 77%",
+    accentForeground: "20 15% 30%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "15 20% 47%",
+  },
+};

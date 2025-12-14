@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const pistachioAlmondTheme: Theme = {
+  name: "pistachio-almond",
+  label: "Pistachio Almond",
+  description: "Nutty green with toasted almond",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "80 30% 32%",
+    card: "0 0% 100%",
+    cardForeground: "80 30% 32%",
+    popover: "0 0% 100%",
+    popoverForeground: "80 30% 32%",
+    primary: "125 20% 71%",
+    primaryForeground: "80 30% 32%",
+    secondary: "60 25% 90%",
+    secondaryForeground: "80 30% 32%",
+    muted: "60 18% 95%",
+    mutedForeground: "60 10% 66%",
+    accent: "35 40% 64%",
+    accentForeground: "80 30% 32%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "125 20% 71%",
+  },
+};

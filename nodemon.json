@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "prisma/schema.prisma",
+    "node_modules/.prisma/client"
+  ],
+  "ext": "prisma,js,ts",
+  "ignore": [
+    ".next",
+    "node_modules/**/!(*.prisma)",
+    "node_modules/.prisma/client/*.wasm",
+    "node_modules/.prisma/client/*.node"
+  ],
+  "exec": "NODE_ENV=development NODE_OPTIONS=\"--no-deprecation\" next dev --turbopack",
+  "delay": "1000"
+}

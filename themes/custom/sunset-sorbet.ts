@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const sunsetSorbetTheme: Theme = {
+  name: "sunset-sorbet",
+  label: "Sunset Sorbet",
+  description: "Coral sunset with ocean blue",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "196 85% 16%",
+    card: "0 0% 100%",
+    cardForeground: "196 85% 16%",
+    popover: "0 0% 100%",
+    popoverForeground: "196 85% 16%",
+    primary: "0 100% 71%",
+    primaryForeground: "0 0% 100%",
+    secondary: "200 38% 93%",
+    secondaryForeground: "196 85% 16%",
+    muted: "200 20% 96%",
+    mutedForeground: "200 18% 56%",
+    accent: "197 80% 40%",
+    accentForeground: "0 0% 100%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "0 100% 71%",
+  },
+};

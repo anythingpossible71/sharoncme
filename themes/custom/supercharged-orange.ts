@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const superchargedOrangeTheme: Theme = {
+  name: "supercharged-orange",
+  label: "Supercharged Orange",
+  description: "High-energy orange explosion",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "20 100% 10%",
+    card: "0 0% 100%",
+    cardForeground: "20 100% 10%",
+    popover: "0 0% 100%",
+    popoverForeground: "20 100% 10%",
+    primary: "16 100% 50%",
+    primaryForeground: "0 0% 100%",
+    secondary: "30 100% 89%",
+    secondaryForeground: "20 100% 10%",
+    muted: "35 100% 95%",
+    mutedForeground: "20 20% 55%",
+    accent: "39 100% 50%",
+    accentForeground: "0 0% 100%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "16 100% 50%",
+  },
+};

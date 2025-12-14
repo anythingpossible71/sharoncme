@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const limeZingTheme: Theme = {
+  name: "lime-zing",
+  label: "Lime Zing",
+  description: "Electric lime with citrus punch",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "140 60% 13%",
+    card: "0 0% 100%",
+    cardForeground: "140 60% 13%",
+    popover: "0 0% 100%",
+    popoverForeground: "140 60% 13%",
+    primary: "100 75% 58%",
+    primaryForeground: "0 0% 0%",
+    secondary: "100 70% 91%",
+    secondaryForeground: "140 60% 13%",
+    muted: "100 60% 95%",
+    mutedForeground: "140 10% 56%",
+    accent: "76 100% 62%",
+    accentForeground: "140 60% 13%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "100 75% 58%",
+  },
+};

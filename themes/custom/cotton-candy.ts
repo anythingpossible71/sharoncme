@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const cottonCandyTheme: Theme = {
+  name: "cotton-candy",
+  label: "Cotton Candy",
+  description: "Soft pastel blue and pink",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "220 10% 40%",
+    card: "0 0% 100%",
+    cardForeground: "220 10% 40%",
+    popover: "0 0% 100%",
+    popoverForeground: "220 10% 40%",
+    primary: "179 60% 76%",
+    primaryForeground: "210 20% 20%",
+    secondary: "200 30% 93%",
+    secondaryForeground: "220 10% 40%",
+    muted: "200 20% 97%",
+    mutedForeground: "220 10% 68%",
+    accent: "350 100% 84%",
+    accentForeground: "220 10% 40%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "179 60% 76%",
+  },
+};

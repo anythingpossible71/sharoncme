@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const passionFruitPunchTheme: Theme = {
+  name: "passion-fruit-punch",
+  label: "Passion Fruit Punch",
+  description: "Exotic passion fruit with peach tones",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "15 60% 23%",
+    card: "0 0% 100%",
+    cardForeground: "15 60% 23%",
+    popover: "0 0% 100%",
+    popoverForeground: "15 60% 23%",
+    primary: "9 100% 64%",
+    primaryForeground: "0 0% 100%",
+    secondary: "25 100% 93%",
+    secondaryForeground: "15 60% 23%",
+    muted: "30 100% 97%",
+    mutedForeground: "20 15% 63%",
+    accent: "28 100% 86%",
+    accentForeground: "15 60% 23%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "9 100% 64%",
+  },
+};

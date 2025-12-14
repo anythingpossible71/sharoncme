@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const highContrastLightTheme: Theme = {
+  name: "high-contrast-light",
+  label: "High Contrast Light",
+  description: "Maximum readability with strong contrast",
+  category: "custom",
+  radius: "0.375rem",
+  colors: {
+    background: "0 0% 100%",
+    foreground: "0 0% 5%",
+    card: "0 0% 100%",
+    cardForeground: "0 0% 5%",
+    popover: "0 0% 100%",
+    popoverForeground: "0 0% 5%",
+    primary: "221 83% 45%",
+    primaryForeground: "0 0% 100%",
+    secondary: "220 15% 92%",
+    secondaryForeground: "0 0% 5%",
+    muted: "220 15% 95%",
+    mutedForeground: "0 0% 35%",
+    accent: "221 83% 53%",
+    accentForeground: "0 0% 100%",
+    destructive: "0 84% 40%",
+    destructiveForeground: "0 0% 100%",
+    border: "0 0% 75%",
+    input: "0 0% 75%",
+    ring: "221 83% 45%",
+  },
+};

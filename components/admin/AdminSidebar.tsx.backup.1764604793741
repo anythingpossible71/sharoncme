@@ -1,0 +1,430 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/admin-ui/button";
+import { Separator } from "@/components/admin-ui/separator";
+import { IframeDialog } from "@/components/admin-ui/iframe-dialog";
+import {
+  LayoutDashboard,
+  Users,
+  Settings as SettingsIcon,
+  Shield,
+  Database,
+  Upload,
+  Mail,
+  Terminal,
+  ChevronRight,
+  ChevronDown,
+  ExternalLink,
+  Fingerprint,
+  Home,
+  Stamp,
+  Globe,
+  FolderKanban,
+  CreditCard,
+  HelpCircle,
+  Rocket,
+  Route,
+  IdCard,
+  Palette,
+  Wrench,
+  ScanSearch,
+  Code,
+  Eye,
+} from "lucide-react";
+import { useState, useEffect } from "react";
+import type { LucideIcon } from "lucide-react";
+import type { User } from "@prisma/client";
+
+type NavigationItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  exact?: boolean;
+  submenu?: {
+    href: string;
+    label: string;
+    icon: LucideIcon;
+  }[];
+  separator?: boolean;
+  hidden?: boolean; // If true, item is functional but not visible in sidebar
+};
+
+export const defaultNavigationItems: NavigationItem[] = [
+  {
+    href: "/admin/app-view",
+    label: "App view",
+    icon: Home,
+  },
+  {
+    href: "/admin/media",
+    label: "Media & Files",
+    icon: Upload,
+    separator: true,
+  },
+  {
+    href: "/admin/tools",
+    label: "Builder Tools",
+    icon: Wrench,
+    submenu: [
+      {
+        href: "/admin/page-templates",
+        label: "Page Templates",
+        icon: Stamp,
+      },
+      {
+        href: "/admin/components",
+        label: "Component Templates",
+        icon: LayoutDashboard,
+      },
+      {
+        href: "/admin/theme-preview",
+        label: "Theme Preview",
+        icon: Palette,
+      },
+      {
+        href: "/admin/tools/icons-search",
+        label: "Icon Search",
+        icon: ScanSearch,
+      },
+      {
+        href: "/admin/templates",
+        label: "Email Templates",
+        icon: Mail,
+      },
+    ],
+  },
+  {
+    href: "/admin/database",
+    label: "Database Viewer",
+    icon: Database,
+    separator: true,
+  },
+  {
+    href: "/admin/users/users-roles",
+    label: "Users Roles",
+    icon: Shield,
+    hidden: true,
+  },
+  {
+    href: "/admin/users/auth-settings",
+    label: "Auth Settings",
+    icon: Fingerprint,
+    hidden: true,
+  },
+  {
+    href: "/admin/users",
+    label: "Users",
+    icon: Users,
+    submenu: [
+      {
+        href: "/admin/users/users-roles",
+        label: "Roles",
+        icon: Shield,
+      },
+      {
+        href: "/admin/users/auth-settings",
+        label: "Settings",
+        icon: Fingerprint,
+      },
+    ],
+  },
+  {
+    href: "/admin/media/storage-configuration",
+    label: "Storage Settings",
+    icon: Upload,
+    hidden: true,
+  },
+  {
+    href: "/admin/email-configuration",
+    label: "Email Configuration",
+    icon: Mail,
+    hidden: true,
+  },
+  {
+    href: "/admin/connected-services",
+    label: "Connected Services",
+    icon: Route,
+    separator: true,
+  },
+  {
+    href: "/admin/environment",
+    label: "Environment Variables",
+    icon: Terminal,
+  },
+  {
+    href: "/admin/app-details",
+    label: "App Details",
+    icon: IdCard,
+  },
+  {
+    href: "/admin/custom-domain",
+    label: "Set Custom Domain",
+    icon: Globe,
+  },
+];
+
+export const mockNavigationItems: NavigationItem[] = [
+  {
+    href: "/admin/my-projects",
+    label: "My Projects",
+    icon: FolderKanban,
+  },
+  {
+    href: "/admin/account",
+    label: "Account & Billing",
+    icon: CreditCard,
+  },
+  {
+    href: "/admin/faq",
+    label: "FAQs",
+    icon: HelpCircle,
+  },
+  {
+    href: "/admin/builder-settings",
+    label: "Builder Settings",
+    icon: SettingsIcon,
+  },
+];
+
+interface AdminSidebarProps {
+  navigationItems?: NavigationItem[];
+  currentUser?: User | null;
+  appName?: string;
+  customDomainUrl?: string | null;
+  deploymentsUrl?: string | null;
+}
+
+export function AdminSidebar({
+  navigationItems = defaultNavigationItems,
+  currentUser: _currentUser,
+  appName: _appName,
+  customDomainUrl,
+  deploymentsUrl,
+}: AdminSidebarProps) {
+  const pathname = usePathname();
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  // Filter navigation items based on customDomainUrl and deploymentsUrl
+  const filteredNavigationItems = navigationItems
+    .map((item) => {
+      // Update custom domain href if URL is available
+      if (item.href === "/admin/custom-domain" && customDomainUrl) {
+        return { ...item, href: customDomainUrl };
+      }
+      // Update versions-history href if deployments URL is available
+      if (item.href === "/admin/versions-history" && deploymentsUrl) {
+        return { ...item, href: deploymentsUrl };
+      }
+      return item;
+    })
+    .filter((item) => {
+      // Hide hidden items (they're functional but not visible)
+      if (item.hidden) {
+        return false;
+      }
+      // Hide custom domain if no URL is available
+      if (item.href === "/admin/custom-domain" && !customDomainUrl) {
+        return false;
+      }
+      // Hide versions-history if no deployments URL is available
+      if (item.href === "/admin/versions-history" && !deploymentsUrl) {
+        return false;
+      }
+      return true;
+    });
+
+  const isActive = (href: string, exact = false) => {
+    if (exact) {
+      return pathname === href;
+    }
+    return pathname.startsWith(href);
+  };
+
+  // Check if a submenu item should be visible (not hidden)
+  const isSubmenuItemVisible = (subitem: NonNullable<NavigationItem["submenu"]>[number]) => {
+    // Check if this submenu item is also a top-level item that's hidden
+    const topLevelItem = navigationItems.find((item) => item.href === subitem.href);
+    return !topLevelItem?.hidden;
+  };
+
+  // Get visible submenu items for a parent
+  const getVisibleSubmenuItems = (item: NavigationItem) => {
+    if (!item.submenu) return [];
+    return item.submenu.filter(isSubmenuItemVisible);
+  };
+
+  // Check if item has any visible submenu items
+  const hasVisibleSubmenuItems = (item: NavigationItem) => {
+    return getVisibleSubmenuItems(item).length > 0;
+  };
+
+  // Auto-expand parent category when a sub-page is active
+  useEffect(() => {
+    const itemsToExpand: string[] = [];
+
+    filteredNavigationItems.forEach((item) => {
+      if (item.submenu && hasVisibleSubmenuItems(item)) {
+        // Check if any visible submenu item matches the current path
+        const hasActiveChild = getVisibleSubmenuItems(item).some((subitem) =>
+          isActive(subitem.href)
+        );
+        if (hasActiveChild) {
+          itemsToExpand.push(item.href);
+        }
+      }
+    });
+
+    setExpandedItems(itemsToExpand);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  const toggleExpanded = (href: string) => {
+    setExpandedItems((prev) =>
+      prev.includes(href) ? prev.filter((item) => item !== href) : [...prev, href]
+    );
+  };
+
+  // Check if item is manually expanded (no auto-expansion based on active child)
+  const shouldExpand = (item: NavigationItem) => {
+    if (!item.submenu) return false;
+    // Only allow expansion if there are visible submenu items
+    if (!hasVisibleSubmenuItems(item)) return false;
+    return expandedItems.includes(item.href);
+  };
+
+  // Check if main item should be highlighted (only exact match for parent items)
+  const isMainItemActive = (item: NavigationItem) => {
+    // Always use exact match - parent items only highlight when directly accessed
+    return isActive(item.href, true);
+  };
+
+  return (
+    <aside className="w-64 h-full bg-background flex flex-col">
+      <nav className="flex flex-col gap-1 px-2 py-4 pb-[20px] flex-1 overflow-y-auto">
+        {filteredNavigationItems.map((item) => {
+          const Icon = item.icon;
+          const active = isMainItemActive(item);
+          const expanded = shouldExpand(item);
+
+          return (
+            <div key={item.href}>
+              {/* Add separator if needed */}
+              {item.separator && <Separator className="my-2" />}
+
+              {item.submenu && hasVisibleSubmenuItems(item) ? (
+                <>
+                  <Button
+                    variant={active ? "secondary" : "ghost"}
+                    className="w-full justify-start gap-3 px-2 py-[calc(0.5rem-2px)]"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleExpanded(item.href);
+                    }}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {expanded ? (
+                      <ChevronDown className="h-4 w-4 ml-auto" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 ml-auto" />
+                    )}
+                  </Button>
+                  {expanded && (
+                    <div className="ml-4 mt-1 flex flex-col gap-1">
+                      {getVisibleSubmenuItems(item).map((subitem) => {
+                        const SubIcon = subitem.icon;
+                        const subActive = isActive(subitem.href);
+
+                        return (
+                          <Link key={subitem.href} href={subitem.href}>
+                            <Button
+                              variant={subActive ? "secondary" : "ghost"}
+                              className="w-full justify-start gap-3 text-sm px-2 py-[calc(0.375rem-2px)]"
+                              size="sm"
+                            >
+                              <SubIcon className="h-3.5 w-3.5" />
+                              <span>{subitem.label}</span>
+                            </Button>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {item.href === "/admin/media" && (
+                    <div className="mb-2 px-2">
+                      <Link href="/admin/app-view">
+                        <Button variant="secondary" size="sm" className="w-full">
+                          <Eye className="h-4 w-4 mr-2" />
+                          Preview
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                  {item.href === "/admin/app-details" && <Separator className="my-2" />}
+                  <Link href={item.href} target={
+                      item.href === "/admin/versions-history" ||
+                      item.href.startsWith("http://") ||
+                      item.href.startsWith("https://")
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      item.href === "/admin/versions-history" ||
+                      item.href.startsWith("http://") ||
+                      item.href.startsWith("https://")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                  >
+                    <Button
+                      variant={active ? "secondary" : "ghost"}
+                      className="w-full justify-start gap-3 px-2 py-[calc(0.5rem-2px)]"
+                      onClick={() => {
+                        // Close all expanded submenus when clicking other items
+                        setExpandedItems([]);
+                      }}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="flex-1 text-left">{item.label}</span>
+                      {(item.href === "/admin/versions-history" ||
+                        item.href.startsWith("http://") ||
+                        item.href.startsWith("https://")) && <ExternalLink className="h-4 w-4" />}
+                    </Button>
+                  </Link>
+                </>
+              )}
+              {/* Add Preview and Publish App buttons below Preview & Publish */}
+              {item.href === "/admin/versions-history" && (
+                <div className="mt-2 px-2 space-y-2">
+                  <Link href="/admin/app-view">
+                    <Button variant="secondary" size="sm" className="w-full">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Preview
+                    </Button>
+                  </Link>
+                  <IframeDialog
+                    trigger={
+                      <Button variant="default" size="sm" className="w-full">
+                        <Rocket className="h-4 w-4 mr-2" />
+                        Publish App
+                      </Button>
+                    }
+                    src="/admin/app-details-iframe"
+                    title="Publish App"
+                    width={800}
+                    height={600}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </nav>
+    </aside>
+  );
+}

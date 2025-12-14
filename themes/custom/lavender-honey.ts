@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const lavenderHoneyTheme: Theme = {
+  name: "lavender-honey",
+  label: "Lavender Honey",
+  description: "Floral lavender with golden honey",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "270 35% 98%",
+    foreground: "260 25% 35%",
+    card: "0 0% 100%",
+    cardForeground: "260 25% 35%",
+    popover: "0 0% 100%",
+    popoverForeground: "260 25% 35%",
+    primary: "260 40% 74%",
+    primaryForeground: "270 45% 99%",
+    secondary: "270 15% 86%",
+    secondaryForeground: "260 25% 35%",
+    muted: "270 10% 93%",
+    mutedForeground: "270 8% 64%",
+    accent: "40 100% 72%",
+    accentForeground: "260 25% 35%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "260 40% 74%",
+  },
+};

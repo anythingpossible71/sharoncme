@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const tuttiFruttiTheme: Theme = {
+  name: "tutti-frutti",
+  label: "Tutti Frutti",
+  description: "Vibrant mixed fruit explosion",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "196 85% 16%",
+    card: "0 0% 100%",
+    cardForeground: "196 85% 16%",
+    popover: "0 0% 100%",
+    popoverForeground: "196 85% 16%",
+    primary: "341 86% 61%",
+    primaryForeground: "0 0% 100%",
+    secondary: "343 100% 94%",
+    secondaryForeground: "196 85% 16%",
+    muted: "343 100% 97%",
+    mutedForeground: "200 18% 56%",
+    accent: "48 100% 70%",
+    accentForeground: "196 85% 16%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "341 86% 61%",
+  },
+};

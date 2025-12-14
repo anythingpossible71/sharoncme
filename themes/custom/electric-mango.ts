@@ -1,0 +1,30 @@
+import { Theme } from "../types";
+
+export const electricMangoTheme: Theme = {
+  name: "electric-mango",
+  label: "Electric Mango",
+  description: "Bold tropical mango burst",
+  category: "custom",
+  radius: "0.5rem",
+  colors: {
+    background: "0 0% 98%",
+    foreground: "0 0% 18%",
+    card: "0 0% 100%",
+    cardForeground: "0 0% 18%",
+    popover: "0 0% 100%",
+    popoverForeground: "0 0% 18%",
+    primary: "33 100% 50%",
+    primaryForeground: "0 0% 100%",
+    secondary: "38 100% 90%",
+    secondaryForeground: "0 0% 18%",
+    muted: "40 100% 96%",
+    mutedForeground: "0 0% 57%",
+    accent: "51 100% 50%",
+    accentForeground: "0 0% 18%",
+    destructive: "0 84% 60%",
+    destructiveForeground: "0 0% 98%",
+    border: "220 13% 83%",
+    input: "220 13% 83%",
+    ring: "33 100% 50%",
+  },
+};
