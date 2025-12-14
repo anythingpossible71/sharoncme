@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth/permissions";
+import { getCurrentUser, isAdmin } from "@/lib/auth/permissions";
 import { MainPageTemplate } from "@/components/templates/MainPageTemplate";
 import {
   FeaturesSection,
@@ -10,6 +10,10 @@ import { getAppSettings } from "@/app/actions/app-settings";
 import { checkAdminExists } from "@/app/actions/admin";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
+import { ContactFormTableWithPagination } from "@/components/admin/ContactFormTableWithPagination";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MessageSquare } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -39,18 +43,56 @@ export default async function Home() {
   const currentUser = await getCurrentUser();
   const appSettings = await getAppSettings();
 
+  // Fetch contact form submissions if user is admin
+  let formSubmissions: any[] = [];
+  if (currentUser) {
+    const userIsAdmin = await isAdmin(currentUser.id);
+    if (userIsAdmin) {
+      try {
+        const submissions = await prisma.contactSubmission.findMany({
+          where: { deleted_at: null },
+          orderBy: { created_at: "desc" },
+        });
+        // Serialize dates for client component
+        formSubmissions = submissions.map((submission) => ({
+          ...submission,
+          created_at: submission.created_at.toISOString(),
+          updated_at: submission.updated_at.toISOString(),
+          deleted_at: submission.deleted_at?.toISOString() ?? null,
+          birthdate: submission.birthdate?.toISOString() ?? null,
+          babyBirthdate: submission.babyBirthdate?.toISOString() ?? null,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch form submissions:", error);
+      }
+    }
+  }
+
   return (
     <MainPageTemplate
       currentUser={currentUser}
       appName={appSettings.appName}
       appLogoUrl={appSettings.appLogoUrl}
-      heroTitle="Build Something Amazing"
-      heroSubtitle="Your Next.js starter template with authentication, admin dashboard, and role-based access control. Ready to customize and deploy."
-      heroPrimaryCta="Get Started"
-      heroSecondaryCta="Learn More"
-      heroPrimaryCtaHref="/auth/signup"
-      heroSecondaryCtaHref="/about"
     >
+      {currentUser && formSubmissions.length > 0 && (
+        <div className="container mx-auto px-4 py-8">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-6 w-6 text-primary" />
+                <CardTitle className="text-xl">Contact Form Submissions</CardTitle>
+              </div>
+              <CardDescription>
+                Click on any row to view the full submission details
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ContactFormTableWithPagination submissions={formSubmissions} />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <FeaturesSection
         title="Everything You Need to Build"
         subtitle="A production-ready foundation with modern tools and best practices built-in."

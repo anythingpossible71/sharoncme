@@ -225,3 +225,35 @@ model BlogPost {
   @@index([published_at])
   @@index([deleted_at])
 }
+
+// ============================================
+// Contact Form System
+// ============================================
+
+model ContactSubmission {
+  id             String    @id @default("")    // ULID string
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?                     // Soft delete
+  
+  // Contact information
+  name           String                        // Required
+  phone          String                        // Required
+  email          String?                       // Optional
+  
+  // Activity details
+  activityType   String                        // Required - chosen activity
+  
+  // Date fields (conditional)
+  birthdate      DateTime?                     // Estimated birth date
+  babyBirthdate  DateTime?                     // Baby's birthday
+  
+  // Additional information
+  message        String?                       // Comments/notes
+  howFound       String?                       // How they found the site
+  referrerName   String?                       // Who referred them
+  
+  @@index([created_at])
+  @@index([deleted_at])
+  @@index([activityType])
+}

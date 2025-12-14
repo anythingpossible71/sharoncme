@@ -20,8 +20,8 @@ interface MainPageTemplateProps {
   currentUser: UserWithRoles | null;
   appName: string;
   appLogoUrl?: string | null;
-  heroTitle: string;
-  heroSubtitle: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
   heroPrimaryCta?: string;
   heroSecondaryCta?: string;
   heroPrimaryCtaHref?: string;
@@ -50,14 +50,16 @@ export function MainPageTemplate({
       />
 
       <main>
-        <HeroSection
-          title={heroTitle}
-          subtitle={heroSubtitle}
-          primaryCta={heroPrimaryCta}
-          secondaryCta={heroSecondaryCta}
-          primaryCtaHref={heroPrimaryCtaHref}
-          secondaryCtaHref={heroSecondaryCtaHref}
-        />
+        {heroTitle && (
+          <HeroSection
+            title={heroTitle}
+            subtitle={heroSubtitle}
+            primaryCta={heroPrimaryCta}
+            secondaryCta={heroSecondaryCta}
+            primaryCtaHref={heroPrimaryCtaHref}
+            secondaryCtaHref={heroSecondaryCtaHref}
+          />
+        )}
 
         {children}
       </main>

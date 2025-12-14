@@ -197,6 +197,25 @@ export const ulidExtension = Prisma.defineExtension({
         return query(args);
       },
     },
+    contactSubmission: {
+      create({ args, query }) {
+        args.data.id = args.data.id || generateId();
+        return query(args);
+      },
+      createMany({ args, query }) {
+        if (Array.isArray(args.data)) {
+          args.data = args.data.map((item) => ({
+            ...item,
+            id: item.id || generateId(),
+          }));
+        }
+        return query(args);
+      },
+      upsert({ args, query }) {
+        args.create.id = args.create.id || generateId();
+        return query(args);
+      },
+    },
   },
 });
 

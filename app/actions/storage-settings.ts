@@ -382,9 +382,8 @@ export async function testStorageConnection(
     }
 
     // Import crunchycone-lib storage classes
-    const { initializeStorageProvider, getStorageProvider } = await import(
-      "crunchycone-lib/storage"
-    );
+    const { initializeStorageProvider, getStorageProvider } =
+      await import("crunchycone-lib/storage");
 
     // Temporarily set environment variables for testing
     const originalEnvVars = new Map<string, string | undefined>();
