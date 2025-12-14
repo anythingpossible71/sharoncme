@@ -12,7 +12,7 @@ export const appThemeConfig = {
    *
    * This is used as the defaultTheme in ConditionalThemeProviderClient
    */
-  currentTheme: "midnight" as const,
+  currentTheme: "light" as const,
 } as const;
 
 export type AppThemeConfig = typeof appThemeConfig;

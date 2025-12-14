@@ -1,11 +1,5 @@
 import { getCurrentUser, isAdmin } from "@/lib/auth/permissions";
 import { MainPageTemplate } from "@/components/templates/MainPageTemplate";
-import {
-  FeaturesSection,
-  TestimonialsSection,
-  PricingSection,
-  TeamSection,
-} from "@/components/sections";
 import { getAppSettings } from "@/app/actions/app-settings";
 import { checkAdminExists } from "@/app/actions/admin";
 import { redirect } from "next/navigation";
@@ -92,23 +86,6 @@ export default async function Home() {
           </Card>
         </div>
       )}
-
-      <FeaturesSection
-        title="Everything You Need to Build"
-        subtitle="A production-ready foundation with modern tools and best practices built-in."
-      />
-
-      <TestimonialsSection
-        title="What Developers Say"
-        subtitle="Trusted by developers building amazing products"
-      />
-
-      <PricingSection
-        title="Simple, Transparent Pricing"
-        subtitle="Choose the plan that's right for your project. All plans include the complete starter template."
-      />
-
-      <TeamSection title="Our Team" subtitle="Meet the people building amazing products" />
     </MainPageTemplate>
   );
 }
