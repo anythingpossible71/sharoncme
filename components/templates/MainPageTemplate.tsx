@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { PageHeader } from "@/components/pages/PageHeader";
-import { PageFooterExtended } from "@/components/pages/PageFooterExtended";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AdminIframes } from "@/components/admin/AdminIframes";
 import type { Prisma } from "@prisma/client";
@@ -63,8 +62,6 @@ export function MainPageTemplate({
 
         {children}
       </main>
-
-      <PageFooterExtended appName={appName} appLogoUrl={appLogoUrl || undefined} />
     </AdminIframes>
   );
 }
