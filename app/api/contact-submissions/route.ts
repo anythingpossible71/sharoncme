@@ -59,19 +59,30 @@ function renderContactFormEmail({
 // CORS headers for cross-origin requests
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
+  "Access-Control-Allow-Headers": "Content-Type, Accept, Authorization",
+  "Access-Control-Max-Age": "86400", // 24 hours
 };
 
 // Handle preflight OPTIONS request
-export async function OPTIONS() {
-  return new Response(null, {
+export async function OPTIONS(req: Request) {
+  // Get the origin from the request
+  const origin = req.headers.get("origin");
+
+  return new NextResponse(null, {
     status: 200,
-    headers: corsHeaders,
+    headers: {
+      ...corsHeaders,
+      // Echo back the origin if provided, otherwise allow all
+      "Access-Control-Allow-Origin": origin || "*",
+    },
   });
 }
 
 export async function POST(req: Request) {
+  // Get the origin from the request for CORS
+  const origin = req.headers.get("origin");
+
   try {
     const data = await req.json();
     const {
@@ -88,13 +99,17 @@ export async function POST(req: Request) {
 
     // Validation: required fields
     if (!name || !phone || !activityType) {
+      const origin = req.headers.get("origin");
       return NextResponse.json(
         {
           error: "Name, phone, and activity type are required.",
         },
         {
           status: 400,
-          headers: corsHeaders,
+          headers: {
+            ...corsHeaders,
+            "Access-Control-Allow-Origin": origin || "*",
+          },
         }
       );
     }
@@ -186,7 +201,9 @@ export async function POST(req: Request) {
           delete require.cache[factoryId];
         } catch (error) {
           // If we can't clear the cache, continue anyway
-          console.warn("Could not clear crunchycone-lib cache:", error);
+          logger.warn("Could not clear crunchycone-lib cache:", {
+            error: error instanceof Error ? error.message : String(error),
+          });
         }
       } else if (emailProvider === "crunchycone") {
         if (emailSettings.crunchyconeApiKey && !process.env.CRUNCHYCONE_API_KEY) {
@@ -349,18 +366,27 @@ export async function POST(req: Request) {
         },
       },
       {
-        headers: corsHeaders,
+        headers: {
+          ...corsHeaders,
+          "Access-Control-Allow-Origin": origin || "*",
+        },
       }
     );
   } catch (err) {
-    console.error("Contact form submission error:", err);
+    logger.error("Contact form submission error:", {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
     return NextResponse.json(
       {
         error: "Failed to submit contact form.",
       },
       {
         status: 500,
-        headers: corsHeaders,
+        headers: {
+          ...corsHeaders,
+          "Access-Control-Allow-Origin": origin || "*",
+        },
       }
     );
   }

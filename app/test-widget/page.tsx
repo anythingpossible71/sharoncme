@@ -16,66 +16,131 @@ declare global {
   }
 }
 
+// Global flag to prevent multiple initializations across re-renders
+let globalWidgetInitialized = false;
+
 export default function TestWidgetPage() {
-  const scriptLoaded = useRef(false);
-  const widgetInitialized = useRef(false);
+  const initAttempted = useRef(false);
 
   useEffect(() => {
-    // Prevent multiple initializations
-    if (scriptLoaded.current && widgetInitialized.current) return;
+    // Prevent multiple initialization attempts
+    if (initAttempted.current || globalWidgetInitialized) return;
+    initAttempted.current = true;
 
-    // Check if widget is already available
-    if (window.SharonContactWidget && !widgetInitialized.current) {
-      // Check if container already has shadow root
-      const container = document.querySelector("#widget-container");
-      if (container && (container as any).shadowRoot) {
-        // Already initialized, skip
-        widgetInitialized.current = true;
-        return;
-      }
+    const container = document.querySelector("#widget-container");
+    if (!container) return;
 
-      window.SharonContactWidget.init({
-        selector: "#widget-container",
-        formtitle: false,
-        formframe: false,
-      });
-      widgetInitialized.current = true;
+    // Check if widget is already initialized (has shadow root)
+    if ((container as any).shadowRoot) {
+      globalWidgetInitialized = true;
       return;
     }
 
-    // Load the script without data attributes (to prevent auto-init)
-    if (!scriptLoaded.current) {
-      const script = document.createElement("script");
-      script.src = "/contact-widget.js";
-      script.onload = () => {
-        scriptLoaded.current = true;
-        // Wait a tick for the script to fully initialize
-        setTimeout(() => {
-          if (window.SharonContactWidget && !widgetInitialized.current) {
-            const container = document.querySelector("#widget-container");
-            if (container && !(container as any).shadowRoot) {
-              window.SharonContactWidget.init({
-                selector: "#widget-container",
-                formtitle: false,
-                formframe: false,
-              });
-              widgetInitialized.current = true;
+    // Clear any existing content in container
+    container.innerHTML = "";
+
+    // Remove any existing widgets that might have been auto-initialized to the body
+    // Look for divs with shadow roots that are direct children of body
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach((child) => {
+      if (child.tagName === "DIV" && (child as any).shadowRoot && child.id !== "widget-container") {
+        child.remove();
+      }
+    });
+
+    const initializeWidget = () => {
+      if (globalWidgetInitialized) return;
+
+      const checkContainer = document.querySelector("#widget-container");
+      if (!checkContainer) return;
+
+      // If already has shadow root, mark as initialized and return
+      if ((checkContainer as any).shadowRoot) {
+        globalWidgetInitialized = true;
+        return;
+      }
+
+      // Double-check: count how many widgets exist
+      const allContainers = document.querySelectorAll("#widget-container");
+      if (allContainers.length > 1) {
+        // Multiple containers found, something is wrong
+        console.warn("Multiple widget containers found");
+      }
+
+      if (window.SharonContactWidget) {
+        try {
+          window.SharonContactWidget.init({
+            selector: "#widget-container",
+            formtitle: false,
+            formframe: false,
+          });
+          // Verify it was created
+          setTimeout(() => {
+            const verifyContainer = document.querySelector("#widget-container");
+            if (verifyContainer && (verifyContainer as any).shadowRoot) {
+              globalWidgetInitialized = true;
             }
+          }, 100);
+        } catch (error) {
+          // If error is about shadow root already existing, that's okay - widget is already initialized
+          if (error instanceof Error && error.message.includes("shadow tree")) {
+            globalWidgetInitialized = true;
+          } else {
+            console.error("Failed to initialize widget:", error);
+            initAttempted.current = false; // Allow retry on error
           }
-        }, 100);
-      };
-      document.body.appendChild(script);
+        }
+      }
+    };
+
+    // Check if widget is already available
+    if (window.SharonContactWidget) {
+      initializeWidget();
+      return;
     }
 
-    return () => {
-      // Cleanup: remove script on unmount
-      const existingScript = document.querySelector('script[src="/contact-widget.js"]');
-      if (existingScript) {
-        existingScript.remove();
-      }
-      scriptLoaded.current = false;
-      widgetInitialized.current = false;
+    // Load the script with data-selector to prevent auto-init to body
+    // The script will auto-init, but with our selector, it will target our container
+    const existingScript = document.querySelector('script[src="/contact-widget.js"]');
+    if (existingScript) {
+      // Script already exists, wait a bit then initialize
+      setTimeout(initializeWidget, 200);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "/contact-widget.js";
+    // Add data-selector so auto-init targets our container
+    script.setAttribute("data-selector", "#widget-container");
+    script.setAttribute("data-formtitle", "false");
+    script.setAttribute("data-formframe", "false");
+
+    // Store a flag before script loads to track if we should skip manual init
+    let autoInitSucceeded = false;
+
+    script.onload = () => {
+      // The script will auto-init with our selector
+      // Wait a bit then check if it was initialized
+      setTimeout(() => {
+        const checkContainer = document.querySelector("#widget-container");
+        if (checkContainer && (checkContainer as any).shadowRoot) {
+          // Auto-init worked, mark as initialized
+          autoInitSucceeded = true;
+          globalWidgetInitialized = true;
+        } else {
+          // Auto-init didn't work (maybe container wasn't ready), initialize manually
+          // But only if not already initialized
+          if (!globalWidgetInitialized && !autoInitSucceeded) {
+            initializeWidget();
+          }
+        }
+      }, 300);
     };
+    script.onerror = () => {
+      initAttempted.current = false; // Allow retry on error
+      globalWidgetInitialized = false;
+    };
+    document.body.appendChild(script);
   }, []);
 
   return (
