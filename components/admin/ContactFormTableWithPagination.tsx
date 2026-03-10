@@ -134,9 +134,7 @@ function parseCsvToImportRows(csvText: string): ContactSubmissionImportRow[] {
   const expected = EXPORT_HEADERS.join(",");
   const actual = headers.join(",");
   if (actual !== expected) {
-    throw new Error(
-      `Invalid CSV format. Expected headers: ${expected}. Got: ${actual}`
-    );
+    throw new Error(`Invalid CSV format. Expected headers: ${expected}. Got: ${actual}`);
   }
 
   const rows: ContactSubmissionImportRow[] = [];
@@ -171,14 +169,29 @@ export function ContactFormTableWithPagination({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSubmission, setSelectedSubmission] = useState<ContactSubmission | null>(null);
-  const [importStatus, setImportStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [importStatus, setImportStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
   const [isImporting, setIsImporting] = useState(false);
   const [importStep, setImportStep] = useState<
     | { phase: "idle" }
     | { phase: "reading"; detail?: string }
     | { phase: "parsing"; detail?: string; rowCount?: number }
-    | { phase: "uploading"; detail?: string; rowCount?: number; batchIndex?: number; totalBatches?: number }
-    | { phase: "processing"; detail?: string; rowCount?: number; batchIndex?: number; totalBatches?: number }
+    | {
+        phase: "uploading";
+        detail?: string;
+        rowCount?: number;
+        batchIndex?: number;
+        totalBatches?: number;
+      }
+    | {
+        phase: "processing";
+        detail?: string;
+        rowCount?: number;
+        batchIndex?: number;
+        totalBatches?: number;
+      }
   >({ phase: "idle" });
   const itemsPerPage = 110;
 
@@ -186,7 +199,11 @@ export function ContactFormTableWithPagination({
   function normalizeImportError(err: unknown): string {
     const msg = err instanceof Error ? err.message : String(err);
     const lower = msg.toLowerCase();
-    if (lower.includes("failed to fetch") || lower.includes("network request failed") || lower.includes("load failed")) {
+    if (
+      lower.includes("failed to fetch") ||
+      lower.includes("network request failed") ||
+      lower.includes("load failed")
+    ) {
       return "Connection lost before the response arrived. The import may have completed—refresh the page to check. If contacts appear, the import succeeded.";
     }
     if (lower.includes("timeout") || lower.includes("timed out")) {
@@ -486,7 +503,11 @@ export function ContactFormTableWithPagination({
             disabled={isImporting}
             className="flex items-center gap-2"
           >
-            {isImporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            {isImporting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4" />
+            )}
             {isImporting ? "Importing..." : "Import contacts"}
           </Button>
         </div>
@@ -497,18 +518,45 @@ export function ContactFormTableWithPagination({
               Import in progress
             </div>
             <ol className="space-y-2 text-sm text-muted-foreground">
-              <li className={`flex items-center gap-2 ${importStep.phase === "reading" ? "text-foreground font-medium" : ""}`}>
-                {importStep.phase === "reading" ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <FileText className="h-3.5 w-3.5 shrink-0" />}
-                Reading file{importStep.phase === "reading" && importStep.detail ? `: ${importStep.detail}` : ""}
+              <li
+                className={`flex items-center gap-2 ${importStep.phase === "reading" ? "text-foreground font-medium" : ""}`}
+              >
+                {importStep.phase === "reading" ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+                ) : (
+                  <FileText className="h-3.5 w-3.5 shrink-0" />
+                )}
+                Reading file
+                {importStep.phase === "reading" && importStep.detail
+                  ? `: ${importStep.detail}`
+                  : ""}
               </li>
-              <li className={`flex items-center gap-2 ${importStep.phase === "parsing" ? "text-foreground font-medium" : ""}`}>
-                {importStep.phase === "parsing" ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <FileText className="h-3.5 w-3.5 shrink-0" />}
-                Parsing CSV{importStep.phase === "parsing" && importStep.detail ? ` — ${importStep.detail}` : ""}
+              <li
+                className={`flex items-center gap-2 ${importStep.phase === "parsing" ? "text-foreground font-medium" : ""}`}
+              >
+                {importStep.phase === "parsing" ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+                ) : (
+                  <FileText className="h-3.5 w-3.5 shrink-0" />
+                )}
+                Parsing CSV
+                {importStep.phase === "parsing" && importStep.detail
+                  ? ` — ${importStep.detail}`
+                  : ""}
               </li>
-              <li className={`flex items-center gap-2 ${importStep.phase === "uploading" || importStep.phase === "processing" ? "text-foreground font-medium" : ""}`}>
-                {(importStep.phase === "uploading" || importStep.phase === "processing") ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <Database className="h-3.5 w-3.5 shrink-0" />}
+              <li
+                className={`flex items-center gap-2 ${importStep.phase === "uploading" || importStep.phase === "processing" ? "text-foreground font-medium" : ""}`}
+              >
+                {importStep.phase === "uploading" || importStep.phase === "processing" ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+                ) : (
+                  <Database className="h-3.5 w-3.5 shrink-0" />
+                )}
                 Sending to server
-                {"batchIndex" in importStep && importStep.batchIndex != null && "totalBatches" in importStep && importStep.totalBatches != null
+                {"batchIndex" in importStep &&
+                importStep.batchIndex != null &&
+                "totalBatches" in importStep &&
+                importStep.totalBatches != null
                   ? ` — batch ${importStep.batchIndex} of ${importStep.totalBatches}`
                   : "rowCount" in importStep && importStep.rowCount
                     ? ` (${importStep.rowCount} rows)`
@@ -520,10 +568,16 @@ export function ContactFormTableWithPagination({
         {importStatus && (
           <div
             className={`p-3 rounded text-sm flex items-start gap-2 ${
-              importStatus.type === "success" ? "bg-green-50 text-green-800 dark:bg-green-950/30 dark:text-green-300" : "bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-300"
+              importStatus.type === "success"
+                ? "bg-green-50 text-green-800 dark:bg-green-950/30 dark:text-green-300"
+                : "bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-300"
             }`}
           >
-            {importStatus.type === "success" ? <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" /> : <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />}
+            {importStatus.type === "success" ? (
+              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            )}
             {importStatus.message}
           </div>
         )}
@@ -557,7 +611,11 @@ export function ContactFormTableWithPagination({
           disabled={isImporting}
           className="flex items-center gap-2"
         >
-          {isImporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+          {isImporting ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Upload className="h-4 w-4" />
+          )}
           {isImporting ? "Importing..." : "Import contacts"}
         </Button>
         <Button
@@ -577,18 +635,41 @@ export function ContactFormTableWithPagination({
             Import in progress
           </div>
           <ol className="space-y-2 text-sm text-muted-foreground">
-            <li className={`flex items-center gap-2 ${importStep.phase === "reading" ? "text-foreground font-medium" : ""}`}>
-              {importStep.phase === "reading" ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <FileText className="h-3.5 w-3.5 shrink-0" />}
-              Reading file{importStep.phase === "reading" && importStep.detail ? `: ${importStep.detail}` : ""}
+            <li
+              className={`flex items-center gap-2 ${importStep.phase === "reading" ? "text-foreground font-medium" : ""}`}
+            >
+              {importStep.phase === "reading" ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+              ) : (
+                <FileText className="h-3.5 w-3.5 shrink-0" />
+              )}
+              Reading file
+              {importStep.phase === "reading" && importStep.detail ? `: ${importStep.detail}` : ""}
             </li>
-            <li className={`flex items-center gap-2 ${importStep.phase === "parsing" ? "text-foreground font-medium" : ""}`}>
-              {importStep.phase === "parsing" ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <FileText className="h-3.5 w-3.5 shrink-0" />}
-              Parsing CSV{importStep.phase === "parsing" && importStep.detail ? ` — ${importStep.detail}` : ""}
+            <li
+              className={`flex items-center gap-2 ${importStep.phase === "parsing" ? "text-foreground font-medium" : ""}`}
+            >
+              {importStep.phase === "parsing" ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+              ) : (
+                <FileText className="h-3.5 w-3.5 shrink-0" />
+              )}
+              Parsing CSV
+              {importStep.phase === "parsing" && importStep.detail ? ` — ${importStep.detail}` : ""}
             </li>
-            <li className={`flex items-center gap-2 ${importStep.phase === "uploading" || importStep.phase === "processing" ? "text-foreground font-medium" : ""}`}>
-              {(importStep.phase === "uploading" || importStep.phase === "processing") ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <Database className="h-3.5 w-3.5 shrink-0" />}
+            <li
+              className={`flex items-center gap-2 ${importStep.phase === "uploading" || importStep.phase === "processing" ? "text-foreground font-medium" : ""}`}
+            >
+              {importStep.phase === "uploading" || importStep.phase === "processing" ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+              ) : (
+                <Database className="h-3.5 w-3.5 shrink-0" />
+              )}
               Sending to server
-              {"batchIndex" in importStep && importStep.batchIndex != null && "totalBatches" in importStep && importStep.totalBatches != null
+              {"batchIndex" in importStep &&
+              importStep.batchIndex != null &&
+              "totalBatches" in importStep &&
+              importStep.totalBatches != null
                 ? ` — batch ${importStep.batchIndex} of ${importStep.totalBatches}`
                 : "rowCount" in importStep && importStep.rowCount
                   ? ` (${importStep.rowCount} rows)`
@@ -600,10 +681,16 @@ export function ContactFormTableWithPagination({
       {importStatus && (
         <div
           className={`p-3 rounded text-sm flex items-start gap-2 ${
-            importStatus.type === "success" ? "bg-green-50 text-green-800 dark:bg-green-950/30 dark:text-green-300" : "bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-300"
+            importStatus.type === "success"
+              ? "bg-green-50 text-green-800 dark:bg-green-950/30 dark:text-green-300"
+              : "bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-300"
           }`}
         >
-          {importStatus.type === "success" ? <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" /> : <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />}
+          {importStatus.type === "success" ? (
+            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
+          ) : (
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          )}
           {importStatus.message}
         </div>
       )}
@@ -708,4 +795,3 @@ export function ContactFormTableWithPagination({
     </div>
   );
 }
-

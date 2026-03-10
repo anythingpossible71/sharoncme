@@ -51,58 +51,60 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     // Update user in transaction
-    const updatedUser = await prisma.$transaction(async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
-      // Prepare user update data
-      const userUpdateData: {
-        email: string;
-        name: string | null;
-        image: string | null;
-        password?: string;
-      } = {
-        email,
-        name: name || null,
-        image: image || null,
-      };
+    const updatedUser = await prisma.$transaction(
+      async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
+        // Prepare user update data
+        const userUpdateData: {
+          email: string;
+          name: string | null;
+          image: string | null;
+          password?: string;
+        } = {
+          email,
+          name: name || null,
+          image: image || null,
+        };
 
-      // Hash password if provided
-      if (password) {
-        userUpdateData.password = await bcrypt.hash(password, 12);
-      }
+        // Hash password if provided
+        if (password) {
+          userUpdateData.password = await bcrypt.hash(password, 12);
+        }
 
-      // Update user
-      const user = await tx.user.update({
-        where: { id: userId },
-        data: userUpdateData,
-      });
-
-      // Update roles if provided
-      if (roles !== undefined) {
-        // Remove existing roles
-        await tx.userRole.updateMany({
-          where: { user_id: userId },
-          data: { deleted_at: new Date() },
+        // Update user
+        const user = await tx.user.update({
+          where: { id: userId },
+          data: userUpdateData,
         });
 
-        // Add new roles
-        if (roles.length > 0) {
-          const roleRecords = await tx.role.findMany({
-            where: {
-              name: { in: roles },
-              deleted_at: null,
-            },
+        // Update roles if provided
+        if (roles !== undefined) {
+          // Remove existing roles
+          await tx.userRole.updateMany({
+            where: { user_id: userId },
+            data: { deleted_at: new Date() },
           });
 
-          await tx.userRole.createMany({
-            data: roleRecords.map((role: (typeof roleRecords)[number]) => ({
-              user_id: userId,
-              role_id: role.id,
-            })),
-          });
+          // Add new roles
+          if (roles.length > 0) {
+            const roleRecords = await tx.role.findMany({
+              where: {
+                name: { in: roles },
+                deleted_at: null,
+              },
+            });
+
+            await tx.userRole.createMany({
+              data: roleRecords.map((role: (typeof roleRecords)[number]) => ({
+                user_id: userId,
+                role_id: role.id,
+              })),
+            });
+          }
         }
-      }
 
-      return user;
-    });
+        return user;
+      }
+    );
 
     return NextResponse.json({
       success: true,

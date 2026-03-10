@@ -36,38 +36,40 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user with default user role
-    const user = await prisma.$transaction(async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
-      const newUser = await tx.user.create({
-        data: {
-          email,
-          password: hashedPassword,
-          emailVerified: new Date(), // Mark as verified since we'll auto-login
-        },
-      });
-
-      // Create user profile
-      await tx.userProfile.create({
-        data: {
-          user_id: newUser.id,
-        },
-      });
-
-      // Assign default user role
-      const userRole = await tx.role.findUnique({
-        where: { name: "user" },
-      });
-
-      if (userRole) {
-        await tx.userRole.create({
+    const user = await prisma.$transaction(
+      async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
+        const newUser = await tx.user.create({
           data: {
-            user_id: newUser.id,
-            role_id: userRole.id,
+            email,
+            password: hashedPassword,
+            emailVerified: new Date(), // Mark as verified since we'll auto-login
           },
         });
-      }
 
-      return newUser;
-    });
+        // Create user profile
+        await tx.userProfile.create({
+          data: {
+            user_id: newUser.id,
+          },
+        });
+
+        // Assign default user role
+        const userRole = await tx.role.findUnique({
+          where: { name: "user" },
+        });
+
+        if (userRole) {
+          await tx.userRole.create({
+            data: {
+              user_id: newUser.id,
+              role_id: userRole.id,
+            },
+          });
+        }
+
+        return newUser;
+      }
+    );
 
     return NextResponse.json({
       success: true,

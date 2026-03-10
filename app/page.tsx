@@ -45,23 +45,23 @@ export default async function Home() {
   let formSubmissions: any[] = [];
   const userIsAdmin = currentUser ? await isAdmin(currentUser.id) : false;
   if (currentUser && userIsAdmin) {
-      try {
-        const submissions = await prisma.contactSubmission.findMany({
-          where: { deleted_at: null },
-          orderBy: { created_at: "desc" },
-        });
-        // Serialize dates for client component
-        formSubmissions = submissions.map((submission: (typeof submissions)[number]) => ({
-          ...submission,
-          created_at: submission.created_at.toISOString(),
-          updated_at: submission.updated_at.toISOString(),
-          deleted_at: submission.deleted_at?.toISOString() ?? null,
-          birthdate: submission.birthdate?.toISOString() ?? null,
-          babyBirthdate: submission.babyBirthdate?.toISOString() ?? null,
-        }));
-      } catch (error) {
-        console.error("Failed to fetch form submissions:", error);
-      }
+    try {
+      const submissions = await prisma.contactSubmission.findMany({
+        where: { deleted_at: null },
+        orderBy: { created_at: "desc" },
+      });
+      // Serialize dates for client component
+      formSubmissions = submissions.map((submission: (typeof submissions)[number]) => ({
+        ...submission,
+        created_at: submission.created_at.toISOString(),
+        updated_at: submission.updated_at.toISOString(),
+        deleted_at: submission.deleted_at?.toISOString() ?? null,
+        birthdate: submission.birthdate?.toISOString() ?? null,
+        babyBirthdate: submission.babyBirthdate?.toISOString() ?? null,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch form submissions:", error);
+    }
   }
 
   return (

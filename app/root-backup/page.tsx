@@ -170,7 +170,9 @@ export default async function Home({ searchParams }: HomeProps) {
 
   // User is signed in
   if (currentUser) {
-    const isAdmin = currentUser.roles.some((r: (typeof currentUser.roles)[number]) => r.role.name === "admin");
+    const isAdmin = currentUser.roles.some(
+      (r: (typeof currentUser.roles)[number]) => r.role.name === "admin"
+    );
 
     return (
       <div className="min-h-screen bg-background">
@@ -233,7 +235,12 @@ export default async function Home({ searchParams }: HomeProps) {
                   <div className="text-sm text-muted-foreground space-y-1">
                     <p>Email: {currentUser.email}</p>
                     <p>Member since: {new Date(currentUser.created_at).toLocaleDateString()}</p>
-                    <p>Roles: {currentUser.roles.map((r: (typeof currentUser.roles)[number]) => r.role.name).join(", ") || "user"}</p>
+                    <p>
+                      Roles:{" "}
+                      {currentUser.roles
+                        .map((r: (typeof currentUser.roles)[number]) => r.role.name)
+                        .join(", ") || "user"}
+                    </p>
                   </div>
                 </div>
 

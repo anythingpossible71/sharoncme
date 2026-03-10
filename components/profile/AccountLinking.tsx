@@ -35,11 +35,15 @@ export function AccountLinking({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Check if Google is connected
-  const hasGoogleAccount = user.accounts.some((account: (typeof user.accounts)[number]) => account.provider === "google");
+  const hasGoogleAccount = user.accounts.some(
+    (account: (typeof user.accounts)[number]) => account.provider === "google"
+  );
   const googleEnabled = isGoogleAuthEnabled();
 
   // Check if GitHub is connected
-  const hasGitHubAccount = user.accounts.some((account: (typeof user.accounts)[number]) => account.provider === "github");
+  const hasGitHubAccount = user.accounts.some(
+    (account: (typeof user.accounts)[number]) => account.provider === "github"
+  );
   const githubEnabled = isGitHubAuthEnabled();
 
   // Check if user can disconnect OAuth (has email/password OR multiple OAuth providers)

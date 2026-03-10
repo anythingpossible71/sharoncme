@@ -404,9 +404,7 @@ export function AdminSidebar({
       {(appName || projectFolderName) && (
         <div className="px-3 pt-4 pb-2 border-b border-border">
           {appName && (
-            <span className="font-semibold text-sm text-foreground truncate block">
-              {appName}
-            </span>
+            <span className="font-semibold text-sm text-foreground truncate block">{appName}</span>
           )}
           {projectFolderName && (
             <span className="text-xs text-muted-foreground truncate block mt-0.5">

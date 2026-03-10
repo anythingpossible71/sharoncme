@@ -108,33 +108,35 @@ export async function setupAdminAction(formData: { email: string; password: stri
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user with admin role in a transaction
-    const user = await prisma.$transaction(async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
-      const newUser = await tx.user.create({
-        data: {
-          email,
-          password: hashedPassword,
-          emailVerified: new Date(),
-          last_signed_in: new Date(),
-        },
-      });
+    const user = await prisma.$transaction(
+      async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
+        const newUser = await tx.user.create({
+          data: {
+            email,
+            password: hashedPassword,
+            emailVerified: new Date(),
+            last_signed_in: new Date(),
+          },
+        });
 
-      // Create user profile
-      await tx.userProfile.create({
-        data: {
-          user_id: newUser.id,
-        },
-      });
+        // Create user profile
+        await tx.userProfile.create({
+          data: {
+            user_id: newUser.id,
+          },
+        });
 
-      // Assign admin role
-      await tx.userRole.create({
-        data: {
-          user_id: newUser.id,
-          role_id: adminRole.id,
-        },
-      });
+        // Assign admin role
+        await tx.userRole.create({
+          data: {
+            user_id: newUser.id,
+            role_id: adminRole.id,
+          },
+        });
 
-      return newUser;
-    });
+        return newUser;
+      }
+    );
 
     logger.info("Admin user created", { userId: user.id, email: user.email });
 

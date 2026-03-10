@@ -8,27 +8,29 @@ import { logger } from "@/lib/logger";
 export async function checkAdminExists(): Promise<boolean> {
   try {
     // Use a transaction to ensure consistency
-    const result = await prisma.$transaction(async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
-      // Check if admin role exists
-      const adminRole = await tx.role.findUnique({
-        where: { name: "admin" },
-      });
+    const result = await prisma.$transaction(
+      async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
+        // Check if admin role exists
+        const adminRole = await tx.role.findUnique({
+          where: { name: "admin" },
+        });
 
-      if (!adminRole) return false;
+        if (!adminRole) return false;
 
-      // Check if any users have the admin role
-      const adminUserCount = await tx.userRole.count({
-        where: {
-          role_id: adminRole.id,
-          deleted_at: null,
-          user: {
+        // Check if any users have the admin role
+        const adminUserCount = await tx.userRole.count({
+          where: {
+            role_id: adminRole.id,
             deleted_at: null,
+            user: {
+              deleted_at: null,
+            },
           },
-        },
-      });
+        });
 
-      return adminUserCount > 0;
-    });
+        return adminUserCount > 0;
+      }
+    );
 
     return result;
   } catch (error) {

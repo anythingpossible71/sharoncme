@@ -89,7 +89,9 @@ export default async function ProfilePage() {
                 "User"}
             </h1>
             <p className="text-muted-foreground">{user.email}</p>
-            {user.roles.some((userRole: (typeof user.roles)[number]) => userRole.role.name === "admin") && (
+            {user.roles.some(
+              (userRole: (typeof user.roles)[number]) => userRole.role.name === "admin"
+            ) && (
               <div className="mt-2 flex flex-wrap gap-1">
                 <Badge variant="secondary">admin</Badge>
               </div>

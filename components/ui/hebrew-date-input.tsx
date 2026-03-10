@@ -49,4 +49,3 @@ const HebrewDateInput = forwardRef<HTMLInputElement, HebrewDateInputProps>(
 HebrewDateInput.displayName = "HebrewDateInput";
 
 export { HebrewDateInput };
-

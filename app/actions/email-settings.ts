@@ -387,13 +387,23 @@ export async function getCurrentEmailSettings(): Promise<EmailSettings> {
     !envVars.CRUNCHYCONE_PROJECT_ID && !!process.env.CRUNCHYCONE_PROJECT_ID;
 
   return {
-    provider: (envVars.CRUNCHYCONE_EMAIL_PROVIDER || process.env.CRUNCHYCONE_EMAIL_PROVIDER) as EmailProvider || "crunchycone",
-    fromAddress: envVars.CRUNCHYCONE_EMAIL_FROM || process.env.CRUNCHYCONE_EMAIL_FROM || envVars.EMAIL_FROM || "noreply@crunchycone.app",
-    fromDisplayName: envVars.CRUNCHYCONE_EMAIL_FROM_DISPLAY || process.env.CRUNCHYCONE_EMAIL_FROM_DISPLAY,
-    sendgridApiKey: envVars.CRUNCHYCONE_SENDGRID_API_KEY || process.env.CRUNCHYCONE_SENDGRID_API_KEY,
+    provider:
+      ((envVars.CRUNCHYCONE_EMAIL_PROVIDER ||
+        process.env.CRUNCHYCONE_EMAIL_PROVIDER) as EmailProvider) || "crunchycone",
+    fromAddress:
+      envVars.CRUNCHYCONE_EMAIL_FROM ||
+      process.env.CRUNCHYCONE_EMAIL_FROM ||
+      envVars.EMAIL_FROM ||
+      "noreply@crunchycone.app",
+    fromDisplayName:
+      envVars.CRUNCHYCONE_EMAIL_FROM_DISPLAY || process.env.CRUNCHYCONE_EMAIL_FROM_DISPLAY,
+    sendgridApiKey:
+      envVars.CRUNCHYCONE_SENDGRID_API_KEY || process.env.CRUNCHYCONE_SENDGRID_API_KEY,
     resendApiKey: envVars.CRUNCHYCONE_RESEND_API_KEY || process.env.CRUNCHYCONE_RESEND_API_KEY,
-    awsAccessKeyId: envVars.CRUNCHYCONE_AWS_ACCESS_KEY_ID || process.env.CRUNCHYCONE_AWS_ACCESS_KEY_ID,
-    awsSecretAccessKey: envVars.CRUNCHYCONE_AWS_SECRET_ACCESS_KEY || process.env.CRUNCHYCONE_AWS_SECRET_ACCESS_KEY,
+    awsAccessKeyId:
+      envVars.CRUNCHYCONE_AWS_ACCESS_KEY_ID || process.env.CRUNCHYCONE_AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey:
+      envVars.CRUNCHYCONE_AWS_SECRET_ACCESS_KEY || process.env.CRUNCHYCONE_AWS_SECRET_ACCESS_KEY,
     awsRegion: envVars.CRUNCHYCONE_AWS_REGION || process.env.CRUNCHYCONE_AWS_REGION,
     smtpHost: envVars.CRUNCHYCONE_SMTP_HOST || process.env.CRUNCHYCONE_SMTP_HOST,
     smtpPort: envVars.CRUNCHYCONE_SMTP_PORT || process.env.CRUNCHYCONE_SMTP_PORT,

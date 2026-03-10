@@ -40,36 +40,38 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // Create user with profile in transaction
-    const user = await prisma.$transaction(async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
-      // Create user
-      const newUser = await tx.user.create({
-        data: {
-          email,
-          name: name || null,
-          image: image || null,
-          password: hashedPassword,
-        },
-      });
-
-      // Assign roles if provided
-      if (roles && roles.length > 0) {
-        const roleRecords = await tx.role.findMany({
-          where: {
-            name: { in: roles },
-            deleted_at: null,
+    const user = await prisma.$transaction(
+      async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => {
+        // Create user
+        const newUser = await tx.user.create({
+          data: {
+            email,
+            name: name || null,
+            image: image || null,
+            password: hashedPassword,
           },
         });
 
-        await tx.userRole.createMany({
-          data: roleRecords.map((role: (typeof roleRecords)[number]) => ({
-            user_id: newUser.id,
-            role_id: role.id,
-          })),
-        });
-      }
+        // Assign roles if provided
+        if (roles && roles.length > 0) {
+          const roleRecords = await tx.role.findMany({
+            where: {
+              name: { in: roles },
+              deleted_at: null,
+            },
+          });
 
-      return newUser;
-    });
+          await tx.userRole.createMany({
+            data: roleRecords.map((role: (typeof roleRecords)[number]) => ({
+              user_id: newUser.id,
+              role_id: role.id,
+            })),
+          });
+        }
+
+        return newUser;
+      }
+    );
 
     return NextResponse.json({
       success: true,

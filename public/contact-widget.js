@@ -183,18 +183,22 @@
         if (apiBaseUrl) {
           var cleanUrl = apiBaseUrl.replace(/\/$/, "");
           // Validate it's not a placeholder
-          if (cleanUrl && !cleanUrl.includes("your-domain.com") && !cleanUrl.includes("example.com")) {
+          if (
+            cleanUrl &&
+            !cleanUrl.includes("your-domain.com") &&
+            !cleanUrl.includes("example.com")
+          ) {
             return cleanUrl;
           }
         }
-        
+
         // Try to get the script's origin (where the widget.js file is hosted)
         const scriptEl =
           document.currentScript ||
           Array.from(document.getElementsByTagName("script")).find(function (s) {
             return /contact-widget\.js(\?|$)/.test(s.src);
           });
-        
+
         if (scriptEl && scriptEl.src) {
           try {
             var u = new URL(scriptEl.src);
@@ -207,17 +211,19 @@
             console.warn("Failed to parse script URL:", e);
           }
         }
-        
+
         // Last resort: use current page origin (but warn if it seems wrong)
         var fallback = window.location.origin;
         if (fallback.includes("your-domain.com") || fallback.includes("example.com")) {
-          console.error("Contact Widget Error: Please specify data-api-base attribute with your production domain URL");
+          console.error(
+            "Contact Widget Error: Please specify data-api-base attribute with your production domain URL"
+          );
           return null; // Return null to prevent the request
         }
-        
+
         return fallback;
       })();
-      
+
       // If target is null or invalid, show error and stop
       if (!target || target.includes("your-domain.com") || target.includes("example.com")) {
         setError("server", true);

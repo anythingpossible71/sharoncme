@@ -68,4 +68,3 @@ async function importContactSubmissions() {
 }
 
 importContactSubmissions();
-
