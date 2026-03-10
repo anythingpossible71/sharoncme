@@ -37,7 +37,7 @@ export async function signInCallback({
 
       if (dbUser) {
         logger.info(`Existing user found: ${user.email}`, {
-          roles: dbUser.roles.map((r) => r.role.name),
+          roles: dbUser.roles.map((r: (typeof dbUser.roles)[number]) => r.role.name),
         });
 
         // Check if user has any roles, if not assign default "user" role

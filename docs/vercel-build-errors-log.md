@@ -54,7 +54,15 @@ tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
 
 ---
 
+## Root Cause: Prisma Generate + Typecheck Order
+
+**Critical:** On Vercel, `prisma generate` does NOT run automatically. The build runs `npm run build` which (before the fix) ran `typecheck` first. Typecheck failed because `@prisma/client` types (User, Prisma, PrismaClient) do not exist until `prisma generate` runs.
+
+**Fix:** Add `npx prisma generate` at the start of the build script, before typecheck.
+
+---
+
 ## Last Updated
 
 - **Date:** 2026-03-10
-- **Latest fix:** `app/root-backup/page.tsx` line 236 – `r` in `roles.map()`
+- **Latest fix:** Added `npx prisma generate` to build; excluded lib/utils/ulid.ts and prisma/seed-client.ts from typecheck; fixed implicit any in signin, password-auth, role-management

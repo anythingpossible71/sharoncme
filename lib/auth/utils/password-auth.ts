@@ -65,7 +65,7 @@ export async function verifyUserCredentials(email: string, password: string) {
         `${user.profile?.first_name || ""} ${user.profile?.last_name || ""}`.trim() ||
         null,
       image: user.image,
-      roles: user.roles.map((ur) => ur.role.name),
+      roles: user.roles.map((ur: (typeof user.roles)[number]) => ur.role.name),
     };
   } catch (error) {
     logger.error("Auth error", {}, error instanceof Error ? error : undefined);

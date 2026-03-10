@@ -38,7 +38,9 @@ export async function getUserRoles(userId: string): Promise<string[]> {
         },
       },
     });
-    return userWithRoles?.roles.map((ur) => ur.role.name) || [];
+    return (
+      userWithRoles?.roles.map((ur: (typeof userWithRoles.roles)[number]) => ur.role.name) || []
+    );
   } catch (error) {
     logger.error("Error fetching user roles", {}, error instanceof Error ? error : undefined);
     return [];
