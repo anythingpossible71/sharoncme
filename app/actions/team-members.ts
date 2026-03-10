@@ -26,7 +26,7 @@ export async function getTeamMembers(): Promise<TeamMemberData[]> {
       orderBy: { order: "asc" },
     });
 
-    return members.map((member) => ({
+    return members.map((member: (typeof members)[number]) => ({
       id: member.id,
       name: member.name,
       role: member.role,
