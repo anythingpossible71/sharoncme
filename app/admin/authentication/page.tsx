@@ -44,7 +44,7 @@ async function getRolesWithCounts() {
   });
 
   // Convert dates to ISO strings for client component
-  return roles.map((role) => ({
+  return roles.map((role: (typeof roles)[number]) => ({
     ...role,
     created_at: role.created_at.toISOString(),
     updated_at: role.updated_at.toISOString(),
@@ -98,7 +98,7 @@ async function getUsers(page: number = 1, search?: string) {
   ]);
 
   // Convert dates to ISO strings for client component
-  const serializedUsers = users.map((user) => ({
+  const serializedUsers = users.map((user: (typeof users)[number]) => ({
     ...user,
     created_at: user.created_at.toISOString(),
     updated_at: user.updated_at.toISOString(),
@@ -112,7 +112,7 @@ async function getUsers(page: number = 1, search?: string) {
           deleted_at: user.profile.deleted_at?.toISOString() ?? null,
         }
       : null,
-    roles: user.roles.map((userRole) => ({
+    roles: user.roles.map((userRole: (typeof user.roles)[number]) => ({
       ...userRole,
       created_at: userRole.created_at.toISOString(),
       updated_at: userRole.updated_at.toISOString(),

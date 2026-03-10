@@ -29,7 +29,7 @@ async function getRoles() {
   });
 
   // Convert dates to ISO strings for client component
-  return roles.map((role) => ({
+  return roles.map((role: (typeof roles)[number]) => ({
     ...role,
     created_at: role.created_at.toISOString(),
     updated_at: role.updated_at.toISOString(),

@@ -51,7 +51,7 @@ export default async function Home() {
           orderBy: { created_at: "desc" },
         });
         // Serialize dates for client component
-        formSubmissions = submissions.map((submission) => ({
+        formSubmissions = submissions.map((submission: (typeof submissions)[number]) => ({
           ...submission,
           created_at: submission.created_at.toISOString(),
           updated_at: submission.updated_at.toISOString(),
