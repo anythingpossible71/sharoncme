@@ -1,6 +1,6 @@
 # Vercel Deployment Options
 
-Summary of options for deploying this template to Vercel and avoiding build failures. For future reference.
+Summary of options for deploying this template to Vercel. and avoiding build failures. For future reference.
 
 ## The Problem
 
