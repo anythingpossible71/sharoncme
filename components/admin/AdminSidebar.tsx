@@ -219,6 +219,7 @@ interface AdminSidebarProps {
   navigationItems?: NavigationItem[];
   currentUser?: User | null;
   appName?: string;
+  projectFolderName?: string;
   customDomainUrl?: string | null;
   deploymentsUrl?: string | null;
 }
@@ -226,7 +227,8 @@ interface AdminSidebarProps {
 export function AdminSidebar({
   navigationItems = defaultNavigationItems,
   currentUser: _currentUser,
-  appName: _appName,
+  appName,
+  projectFolderName,
   customDomainUrl,
   deploymentsUrl,
 }: AdminSidebarProps) {
@@ -399,6 +401,20 @@ export function AdminSidebar({
 
   return (
     <aside className="w-64 h-full bg-background flex flex-col">
+      {(appName || projectFolderName) && (
+        <div className="px-3 pt-4 pb-2 border-b border-border">
+          {appName && (
+            <span className="font-semibold text-sm text-foreground truncate block">
+              {appName}
+            </span>
+          )}
+          {projectFolderName && (
+            <span className="text-xs text-muted-foreground truncate block mt-0.5">
+              projects/{projectFolderName}
+            </span>
+          )}
+        </div>
+      )}
       <nav className="flex flex-col gap-1 px-2 py-4 pb-[20px] flex-1 overflow-y-auto">
         {filteredNavigationItems.map((item) => {
           const Icon = item.icon;

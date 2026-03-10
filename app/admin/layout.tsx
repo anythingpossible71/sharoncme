@@ -1,3 +1,4 @@
+import path from "path";
 import { getCurrentUser, isAdmin } from "@/lib/auth/permissions";
 import { AdminLayoutClient } from "@/components/admin/AdminLayoutClient";
 import { AdminFlattenedLayoutClient } from "@/components/admin/AdminFlattenedLayoutClient";
@@ -9,6 +10,8 @@ import {
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import "@/app/admin/admin.css";
+
+const projectFolderName = path.basename(process.cwd());
 
 function isPlatformEnvironment(): boolean {
   const value = process.env.CRUNCHYCONE_PLATFORM;
@@ -72,6 +75,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         defaultTheme="light"
         appName={appSettings.appName}
         appLogoUrl={appSettings.appLogoUrl}
+        projectFolderName={projectFolderName}
         customDomainUrl={customDomainUrl}
         deploymentsUrl={deploymentsUrl}
         hidePublishButton={hidePublishButton}
@@ -88,6 +92,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       defaultTheme="dark"
       appName={appSettings.appName}
       appLogoUrl={appSettings.appLogoUrl}
+      projectFolderName={projectFolderName}
       customDomainUrl={customDomainUrl}
       deploymentsUrl={deploymentsUrl}
       hidePublishButton={hidePublishButton}

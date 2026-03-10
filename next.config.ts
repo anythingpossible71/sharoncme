@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   // Enable standalone output for Docker deployments
   output: "standalone",
 
+  serverActions: {
+    bodySizeLimit: "2mb",
+  },
+
   // Headers configuration
   async headers() {
     // Check if we're in remote CrunchyCone production environment

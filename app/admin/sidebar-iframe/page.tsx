@@ -1,3 +1,4 @@
+import path from "path";
 import { getCurrentUser, isAdmin } from "@/lib/auth/permissions";
 import { getAppSettings } from "@/app/actions/app-settings";
 import {
@@ -7,6 +8,8 @@ import {
 import { IframeSidebar } from "@/components/admin/IframeSidebar";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+
+const projectFolderName = path.basename(process.cwd());
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +39,7 @@ export default async function SidebarIframePage() {
     <div className="h-full w-full" style={{ margin: 0, padding: 0 }}>
       <IframeSidebar
         appName={appSettings.appName}
+        projectFolderName={projectFolderName}
         currentUser={currentUser}
         customDomainUrl={customDomainUrl}
         deploymentsUrl={deploymentsUrl}

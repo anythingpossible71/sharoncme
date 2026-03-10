@@ -11,6 +11,7 @@ interface AdminFlattenedLayoutClientProps {
   defaultTheme?: string;
   appName?: string;
   appLogoUrl?: string;
+  projectFolderName?: string;
   customDomainUrl?: string | null;
   deploymentsUrl?: string | null;
   hidePublishButton?: boolean;
@@ -22,6 +23,7 @@ export function AdminFlattenedLayoutClient({
   defaultTheme = "light",
   appName,
   appLogoUrl,
+  projectFolderName,
   customDomainUrl,
   deploymentsUrl,
   hidePublishButton,
@@ -53,6 +55,7 @@ export function AdminFlattenedLayoutClient({
             <div className="h-full w-full" style={{ margin: 0, padding: 0 }}>
               <IframeSidebar
                 appName={appName}
+                projectFolderName={projectFolderName}
                 currentUser={currentUser}
                 customDomainUrl={customDomainUrl}
                 deploymentsUrl={deploymentsUrl}

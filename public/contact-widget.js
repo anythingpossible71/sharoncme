@@ -179,21 +179,58 @@
       form.classList.add("disabled");
 
       var target = (function () {
-        if (apiBaseUrl) return apiBaseUrl.replace(/\/$/, "");
-        // default to script's origin
+        // If apiBaseUrl is explicitly provided, use it
+        if (apiBaseUrl) {
+          var cleanUrl = apiBaseUrl.replace(/\/$/, "");
+          // Validate it's not a placeholder
+          if (cleanUrl && !cleanUrl.includes("your-domain.com") && !cleanUrl.includes("example.com")) {
+            return cleanUrl;
+          }
+        }
+        
+        // Try to get the script's origin (where the widget.js file is hosted)
         const scriptEl =
           document.currentScript ||
           Array.from(document.getElementsByTagName("script")).find(function (s) {
             return /contact-widget\.js(\?|$)/.test(s.src);
           });
-        if (scriptEl) {
+        
+        if (scriptEl && scriptEl.src) {
           try {
             var u = new URL(scriptEl.src);
-            return u.origin;
-          } catch (_) {}
+            var origin = u.origin;
+            // Validate it's not a placeholder
+            if (origin && !origin.includes("your-domain.com") && !origin.includes("example.com")) {
+              return origin;
+            }
+          } catch (e) {
+            console.warn("Failed to parse script URL:", e);
+          }
         }
-        return window.location.origin;
+        
+        // Last resort: use current page origin (but warn if it seems wrong)
+        var fallback = window.location.origin;
+        if (fallback.includes("your-domain.com") || fallback.includes("example.com")) {
+          console.error("Contact Widget Error: Please specify data-api-base attribute with your production domain URL");
+          return null; // Return null to prevent the request
+        }
+        
+        return fallback;
       })();
+      
+      // If target is null or invalid, show error and stop
+      if (!target || target.includes("your-domain.com") || target.includes("example.com")) {
+        setError("server", true);
+        const errorEl = form.querySelector('[data-err="server"]');
+        if (errorEl) {
+          errorEl.textContent = "שגיאה בהגדרת הטופס. אנא פנו למנהל האתר.";
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+        form.classList.remove("disabled");
+        console.error("Contact Widget: Invalid API base URL. Please set data-api-base attribute.");
+        return;
+      }
 
       fetch(target + "/api/contact-submissions", {
         method: "POST",

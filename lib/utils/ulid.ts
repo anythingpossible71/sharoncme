@@ -249,9 +249,9 @@ export function createPrismaClient() {
     try {
       // Import Turso adapter - webpack is configured to handle these files
 
-      const { PrismaLibSQL } = require("@prisma/adapter-libsql");
+      const { PrismaLibSql } = require("@prisma/adapter-libsql");
 
-      const adapter = new PrismaLibSQL({
+      const adapter = new PrismaLibSql({
         url: process.env.DATABASE_URL,
         authToken: process.env.TURSO_AUTH_TOKEN,
       });

@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { MessageSquare } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // Allow longer-running imports (batched)
 
 // pageDescription: Discover how our platform helps you build amazing products with our comprehensive feature set
 
@@ -42,9 +43,8 @@ export default async function Home() {
 
   // Fetch contact form submissions if user is admin
   let formSubmissions: any[] = [];
-  if (currentUser) {
-    const userIsAdmin = await isAdmin(currentUser.id);
-    if (userIsAdmin) {
+  const userIsAdmin = currentUser ? await isAdmin(currentUser.id) : false;
+  if (currentUser && userIsAdmin) {
       try {
         const submissions = await prisma.contactSubmission.findMany({
           where: { deleted_at: null },
@@ -62,7 +62,6 @@ export default async function Home() {
       } catch (error) {
         console.error("Failed to fetch form submissions:", error);
       }
-    }
   }
 
   return (
@@ -71,7 +70,7 @@ export default async function Home() {
       appName={appSettings.appName}
       appLogoUrl={appSettings.appLogoUrl}
     >
-      {currentUser && formSubmissions.length > 0 && (
+      {currentUser && userIsAdmin && (
         <div className="container mx-auto px-4 py-8">
           <Card>
             <CardHeader>
@@ -80,7 +79,9 @@ export default async function Home() {
                 <CardTitle className="text-xl">Contact Form Submissions</CardTitle>
               </div>
               <CardDescription>
-                Click on any row to view the full submission details
+                {formSubmissions.length > 0
+                  ? "Click on any row to view the full submission details"
+                  : "Import a CSV or wait for form submissions"}
               </CardDescription>
             </CardHeader>
             <CardContent>

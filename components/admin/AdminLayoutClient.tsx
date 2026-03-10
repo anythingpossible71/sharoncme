@@ -15,6 +15,7 @@ interface AdminLayoutClientProps {
   defaultTheme?: string;
   appName?: string;
   appLogoUrl?: string;
+  projectFolderName?: string;
   customDomainUrl?: string | null;
   deploymentsUrl?: string | null;
   hidePublishButton?: boolean;
@@ -26,6 +27,7 @@ export function AdminLayoutClient({
   defaultTheme = "light",
   appName,
   appLogoUrl,
+  projectFolderName,
   customDomainUrl,
   deploymentsUrl,
   hidePublishButton,
@@ -136,6 +138,7 @@ export function AdminLayoutClient({
                   navigationItems={mockNavigationItems}
                   currentUser={currentUser}
                   appName={appName}
+                  projectFolderName={projectFolderName}
                   customDomainUrl={customDomainUrl}
                   deploymentsUrl={deploymentsUrl}
                 />
@@ -185,6 +188,7 @@ export function AdminLayoutClient({
               <AdminSidebar
                 currentUser={currentUser}
                 appName={appName}
+                projectFolderName={projectFolderName}
                 customDomainUrl={customDomainUrl}
                 deploymentsUrl={deploymentsUrl}
               />
