@@ -233,7 +233,7 @@ export default async function Home({ searchParams }: HomeProps) {
                   <div className="text-sm text-muted-foreground space-y-1">
                     <p>Email: {currentUser.email}</p>
                     <p>Member since: {new Date(currentUser.created_at).toLocaleDateString()}</p>
-                    <p>Roles: {currentUser.roles.map((r) => r.role.name).join(", ") || "user"}</p>
+                    <p>Roles: {currentUser.roles.map((r: (typeof currentUser.roles)[number]) => r.role.name).join(", ") || "user"}</p>
                   </div>
                 </div>
 
