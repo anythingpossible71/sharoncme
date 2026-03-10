@@ -170,7 +170,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   // User is signed in
   if (currentUser) {
-    const isAdmin = currentUser.roles.some((r) => r.role.name === "admin");
+    const isAdmin = currentUser.roles.some((r: (typeof currentUser.roles)[number]) => r.role.name === "admin");
 
     return (
       <div className="min-h-screen bg-background">

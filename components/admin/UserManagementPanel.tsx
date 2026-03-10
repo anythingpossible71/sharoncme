@@ -697,7 +697,7 @@ export const UserManagementPanel = forwardRef<UserManagementPanelRef, UserManage
                       )}
                     </div>
                     {selectedUser.id === currentUserId &&
-                      selectedUser.roles.some((r) => r.role.name === "admin") && (
+                      selectedUser.roles.some((r: (typeof selectedUser.roles)[number]) => r.role.name === "admin") && (
                         <p className="text-xs text-muted-foreground mt-1">
                           You cannot remove your own admin role
                         </p>
@@ -719,7 +719,7 @@ export const UserManagementPanel = forwardRef<UserManagementPanelRef, UserManage
                         <SelectContent>
                           {availableRoles
                             .filter(
-                              (role) => !selectedUser.roles.some((ur) => ur.role.name === role.name)
+                              (role) => !selectedUser.roles.some((ur: (typeof selectedUser.roles)[number]) => ur.role.name === role.name)
                             )
                             .map((role) => (
                               <SelectItem key={role.id} value={role.name}>
