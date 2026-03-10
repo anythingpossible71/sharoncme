@@ -3,21 +3,10 @@ import { PageHeader } from "@/components/pages/PageHeader";
 import { PageFooterExtended } from "@/components/pages/PageFooterExtended";
 import { AppAdminHero } from "@/components/sections/AppAdminHero";
 import { AdminIframes } from "@/components/admin/AdminIframes";
-import type { Prisma } from "@prisma/client";
-
-type UserWithRoles = Prisma.UserGetPayload<{
-  include: {
-    profile: true;
-    roles: {
-      include: {
-        role: true;
-      };
-    };
-  };
-}>;
+import type { CurrentUserWithRoles } from "@/lib/auth/permissions";
 
 interface InnerPageTemplateProps {
-  currentUser: UserWithRoles | null;
+  currentUser: CurrentUserWithRoles | null;
   appName: string;
   appLogoUrl?: string | null;
   heroTitle: string;

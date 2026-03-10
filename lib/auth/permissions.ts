@@ -74,6 +74,9 @@ export async function getCurrentUser() {
   return user;
 }
 
+/** Type for user returned by getCurrentUser (with profile + roles). Use instead of Prisma.UserGetPayload in client components. */
+export type CurrentUserWithRoles = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;
+
 // Helper function to check if current user is admin (using session roles for performance)
 export async function isCurrentUserAdmin(): Promise<boolean> {
   const session = await auth();

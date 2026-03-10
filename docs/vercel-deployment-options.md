@@ -112,6 +112,19 @@ Run `npm run build` in GitHub Actions (or similar) before merge. Fails fast with
 
 ---
 
+## Prisma Import in Client Components
+
+Vercel may fail with `Module '"@prisma/client"' has no exported member 'Prisma'` in client components.
+
+**Fix:** Use `CurrentUserWithRoles` from `@/lib/auth/permissions` instead of `Prisma.UserGetPayload<...>`:
+
+```typescript
+import type { CurrentUserWithRoles } from "@/lib/auth/permissions";
+// currentUser: CurrentUserWithRoles
+```
+
+---
+
 ## Package Manager Note
 
 - **npm**: Keep `package-lock.json`, remove `pnpm-lock.yaml` if present.

@@ -15,22 +15,10 @@ import { SignOutButton } from "@/components/auth/SignOutButton";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import { User, Settings, Menu, Home, Users, Mail, Inbox, BookOpen } from "lucide-react";
-import type { Prisma } from "@prisma/client";
-
-// User type with included relations from getCurrentUser
-type UserWithRoles = Prisma.UserGetPayload<{
-  include: {
-    profile: true;
-    roles: {
-      include: {
-        role: true;
-      };
-    };
-  };
-}>;
+import type { CurrentUserWithRoles } from "@/lib/auth/permissions";
 
 interface PageHeaderProps {
-  currentUser: UserWithRoles | null;
+  currentUser: CurrentUserWithRoles | null;
   appName?: string;
   appLogoUrl?: string;
 }

@@ -2,21 +2,10 @@ import { ReactNode } from "react";
 import { PageHeader } from "@/components/pages/PageHeader";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AdminIframes } from "@/components/admin/AdminIframes";
-import type { Prisma } from "@prisma/client";
-
-type UserWithRoles = Prisma.UserGetPayload<{
-  include: {
-    profile: true;
-    roles: {
-      include: {
-        role: true;
-      };
-    };
-  };
-}>;
+import type { CurrentUserWithRoles } from "@/lib/auth/permissions";
 
 interface MainPageTemplateProps {
-  currentUser: UserWithRoles | null;
+  currentUser: CurrentUserWithRoles | null;
   appName: string;
   appLogoUrl?: string | null;
   heroTitle?: string;

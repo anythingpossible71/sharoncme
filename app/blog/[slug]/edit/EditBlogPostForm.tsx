@@ -25,7 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { SerializedEditorState } from "lexical";
 import { Save } from "lucide-react";
 import type { BlogPostData } from "@/app/actions/blog-posts";
-import type { Prisma } from "@prisma/client";
+import type { CurrentUserWithRoles } from "@/lib/auth/permissions";
 
 const blogPostSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -36,24 +36,13 @@ const blogPostSchema = z.object({
 
 type BlogPostFormData = z.infer<typeof blogPostSchema>;
 
-type UserWithRoles = Prisma.UserGetPayload<{
-  include: {
-    profile: true;
-    roles: {
-      include: {
-        role: true;
-      };
-    };
-  };
-}>;
-
 interface EditBlogPostFormProps {
   post: BlogPostData;
   appSettings: {
     appName: string;
     appLogoUrl?: string | null;
   };
-  currentUser: UserWithRoles;
+  currentUser: CurrentUserWithRoles;
 }
 
 export function EditBlogPostForm({ post, appSettings, currentUser }: EditBlogPostFormProps) {
