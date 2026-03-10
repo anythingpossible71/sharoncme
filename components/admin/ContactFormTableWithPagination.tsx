@@ -508,9 +508,9 @@ export function ContactFormTableWithPagination({
               <li className={`flex items-center gap-2 ${importStep.phase === "uploading" || importStep.phase === "processing" ? "text-foreground font-medium" : ""}`}>
                 {(importStep.phase === "uploading" || importStep.phase === "processing") ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <Database className="h-3.5 w-3.5 shrink-0" />}
                 Sending to server
-                {importStep.batchIndex != null && importStep.totalBatches != null
+                {"batchIndex" in importStep && importStep.batchIndex != null && "totalBatches" in importStep && importStep.totalBatches != null
                   ? ` — batch ${importStep.batchIndex} of ${importStep.totalBatches}`
-                  : importStep.rowCount
+                  : "rowCount" in importStep && importStep.rowCount
                     ? ` (${importStep.rowCount} rows)`
                     : ""}
               </li>
@@ -588,9 +588,9 @@ export function ContactFormTableWithPagination({
             <li className={`flex items-center gap-2 ${importStep.phase === "uploading" || importStep.phase === "processing" ? "text-foreground font-medium" : ""}`}>
               {(importStep.phase === "uploading" || importStep.phase === "processing") ? <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" /> : <Database className="h-3.5 w-3.5 shrink-0" />}
               Sending to server
-              {importStep.batchIndex != null && importStep.totalBatches != null
+              {"batchIndex" in importStep && importStep.batchIndex != null && "totalBatches" in importStep && importStep.totalBatches != null
                 ? ` — batch ${importStep.batchIndex} of ${importStep.totalBatches}`
-                : importStep.rowCount
+                : "rowCount" in importStep && importStep.rowCount
                   ? ` (${importStep.rowCount} rows)`
                   : ""}
             </li>

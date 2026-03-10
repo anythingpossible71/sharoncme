@@ -36,6 +36,7 @@ app.log
 # env files
 .env
 .env*.local
+env.vercel.example
 
 # vercel
 .vercel

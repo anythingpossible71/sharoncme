@@ -4,8 +4,10 @@ const nextConfig: NextConfig = {
   // Enable standalone output for Docker deployments
   output: "standalone",
 
-  serverActions: {
-    bodySizeLimit: "2mb",
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
   },
 
   // Headers configuration
