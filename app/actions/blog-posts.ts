@@ -107,7 +107,7 @@ export async function getBlogPosts(
       ],
     });
 
-    return posts.map((post) => ({
+    return posts.map((post: (typeof posts)[number]) => ({
       id: post.id,
       title: post.title,
       slug: post.slug,
