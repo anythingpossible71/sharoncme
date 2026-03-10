@@ -1,0 +1,40 @@
+---
+description: Vercel deployment, strict TypeScript, pre-deploy checks
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Vercel Deployment & Strict TypeScript
+
+Projects deploying to Vercel must avoid implicit `any`. Follow these patterns.
+
+## Callback Parameter Types
+
+### Prisma `$transaction` callbacks
+
+```typescript
+await prisma.$transaction(async (tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) => { ... });
+```
+
+### Array `.map()` callbacks (Prisma results)
+
+```typescript
+return items.map((item: (typeof items)[number]) => ({ ... }));
+// Or with type alias:
+type ItemType = (typeof items)[number];
+return items.map((item: ItemType) => ({ ... }));
+```
+
+## Pre-Deploy Checklist
+
+1. Run `npm run build` before push.
+2. Or `npm run build:clean` to match Vercel (no cache).
+3. Or `npm run typecheck` for faster check (excludes tests).
+
+## Package Manager
+
+Use npm. Remove pnpm-lock.yaml if present.
+
+## Next.js 16
+
+`serverActions` under `experimental` in next.config.ts.

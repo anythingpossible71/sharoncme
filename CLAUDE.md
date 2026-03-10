@@ -27,6 +27,7 @@ Implementation patterns and anti-patterns are in `.cursor/rules/`:
 | `THEMES.mdc` | Theme system, colors, customization |
 | `ENVIRONMENT.mdc` | Env vars, secrets management |
 | `GIT-WORKFLOW.mdc` | Commits, package sync |
+| `VERCEL-DEPLOY.mdc` | Vercel deployment, strict TypeScript, no implicit any |
 | `CRUNCHYCONE.mdc` | Platform deployment (if applicable) |
 
 ## Critical Patterns (Must Know)

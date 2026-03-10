@@ -93,7 +93,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
           });
 
           await tx.userRole.createMany({
-            data: roleRecords.map((role) => ({
+            data: roleRecords.map((role: (typeof roleRecords)[number]) => ({
               user_id: userId,
               role_id: role.id,
             })),

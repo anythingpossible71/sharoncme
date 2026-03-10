@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
         });
 
         await tx.userRole.createMany({
-          data: roleRecords.map((role) => ({
+          data: roleRecords.map((role: (typeof roleRecords)[number]) => ({
             user_id: newUser.id,
             role_id: role.id,
           })),

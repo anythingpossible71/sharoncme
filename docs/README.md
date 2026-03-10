@@ -40,6 +40,16 @@ Create and customize themes:
 - Color utilities and guidelines
 - System theme detection
 
+### 🚀 [Vercel Deployment Options](./vercel-deployment-options.md)
+
+Options for deploying to Vercel:
+
+- Strict TypeScript patterns (no implicit any)
+- Prisma transaction and map callback typing
+- Pre-deploy checklist and scripts
+- Cursor rule, typecheck, hooks
+- Package manager and Next.js config notes
+
 ### 🐳 [Container Deployment](./container-deployment.md)
 
 Deploy to production container platforms:
