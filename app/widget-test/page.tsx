@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Script from "next/script";
 
 declare global {
   interface Window {
@@ -19,66 +18,75 @@ declare global {
 
 export default function WidgetTestPage() {
   useEffect(() => {
-    // Initialize widgets after script loads
     const initWidgets = () => {
-      if (!window.SharonContactWidget) return;
+      if (typeof window === "undefined" || !window.SharonContactWidget) return;
 
-      // Widget 1: No title, no frame
-      window.SharonContactWidget.init({
-        selector: "#widget-1",
-        formtitle: false,
-        formframe: false,
-      });
-
-      // Widget 2: With title, no frame
-      window.SharonContactWidget.init({
-        selector: "#widget-2",
-        formtitle: true,
-        formframe: false,
-      });
-
-      // Widget 3: No title, with frame
-      window.SharonContactWidget.init({
-        selector: "#widget-3",
-        formtitle: false,
-        formframe: true,
-      });
-
-      // Widget 4: Using JavaScript API (already done above, but showing it works)
-      window.SharonContactWidget.init({
-        selector: "#widget-4",
-        formtitle: false,
-        formframe: false,
-      });
-
-      // Widget 5: No title, no frame (same as widget 1, but showing URL params work)
-      window.SharonContactWidget.init({
-        selector: "#widget-5",
-        formtitle: false,
-        formframe: false,
-      });
+      try {
+        window.SharonContactWidget.init({
+          selector: "#widget-1",
+          formtitle: false,
+          formframe: false,
+        });
+        window.SharonContactWidget.init({
+          selector: "#widget-2",
+          formtitle: true,
+          formframe: false,
+        });
+        window.SharonContactWidget.init({
+          selector: "#widget-3",
+          formtitle: false,
+          formframe: true,
+        });
+        window.SharonContactWidget.init({
+          selector: "#widget-4",
+          formtitle: false,
+          formframe: false,
+        });
+        window.SharonContactWidget.init({
+          selector: "#widget-5",
+          formtitle: false,
+          formframe: false,
+        });
+      } catch (e) {
+        console.error("Widget init error:", e);
+      }
     };
 
-    // Check if widget is already loaded
-    if (window.SharonContactWidget) {
-      initWidgets();
-    } else {
-      // Wait for script to load
-      const checkInterval = setInterval(() => {
+    const loadScript = () => {
+      if (document.querySelector('script[src="/contact-widget.js"]')) {
         if (window.SharonContactWidget) {
-          clearInterval(checkInterval);
           initWidgets();
+        } else {
+          const check = setInterval(() => {
+            if (window.SharonContactWidget) {
+              clearInterval(check);
+              initWidgets();
+            }
+          }, 50);
+          setTimeout(() => clearInterval(check), 5000);
         }
-      }, 100);
+        return;
+      }
 
-      // Cleanup after 5 seconds if still not loaded
-      setTimeout(() => clearInterval(checkInterval), 5000);
-    }
+      const script = document.createElement("script");
+      script.src = "/contact-widget.js";
+      script.onload = () => {
+        const check = setInterval(() => {
+          if (window.SharonContactWidget) {
+            clearInterval(check);
+            initWidgets();
+          }
+        }, 50);
+        setTimeout(() => clearInterval(check), 5000);
+      };
+      document.body.appendChild(script);
+    };
+
+    loadScript();
   }, []);
 
   return (
     <>
-      <Script src="/contact-widget.js" strategy="afterInteractive" />
       <div
         style={{
           fontFamily: "Arial, sans-serif",
