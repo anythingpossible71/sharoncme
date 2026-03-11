@@ -276,8 +276,12 @@
       });
     if (!scriptEl) return;
 
-    // Get config from data attributes first, then from URL params
-    var selector = scriptEl.getAttribute("data-selector") || null;
+    // Only auto-init when data-selector is explicitly set. Otherwise the page will call init() manually.
+    // Without this, we'd create a widget at document.body AND the manual init would create another = duplication.
+    var selector = scriptEl.getAttribute("data-selector");
+    if (selector === null || selector === "") return;
+
+    // Get config from data attributes
     var formtitle = parseBool(scriptEl.getAttribute("data-formtitle"), true);
     var formframe = parseBool(scriptEl.getAttribute("data-formframe"), true);
     var apiBaseUrl = scriptEl.getAttribute("data-api-base") || null;

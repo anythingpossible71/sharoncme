@@ -74,7 +74,7 @@ npm run verify:production
 - If **exit 0** → safe to push. Vercel build will succeed.
 - If **exit 1** → fix the reported errors (and search for similar patterns), then run again until pass.
 
-`verify:production` runs: `typecheck` → `lint` → `rm -rf .next` → `build`. This matches what Vercel does (clean build) plus typecheck and lint guards.
+`verify:production` runs: `prisma generate` → `typecheck` → `lint` → `rm -rf .next` → `build`. This matches what Vercel does (clean build) plus Prisma, typecheck, and lint guards.
 
 ---
 
